@@ -39,10 +39,10 @@ SALARY_MISC_CHOICES = (
 )
 
 CONTRACT_CHOICES = (
-  ('YR', 'Re-negotiated every year'),
-  ('CT', 'Negotiated at start of program'),
-  ('NA', 'No support provided'),
-  ('NS', 'Not sure'),
+  ('YR', 'Re-negotiated every year', {}),
+  ('CT', 'Negotiated at start of program', {}),
+  ('NA', 'No support provided', {}),
+  ('NS', 'Not sure', {}),
 )
 
 LOAN_CHOICES = (
