@@ -114,9 +114,12 @@ import os.path
 PROJECT_DIR = os.path.dirname(__file__)
 print 'hi', PROJECT_DIR
 TEMPLATE_DIRS = (
+    os.path.join(PROJECT_DIR, 'templates'),
     os.path.join(PROJECT_DIR, 'gradpay/templates'),
     #'/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
 )
+for td in TEMPLATE_DIRS:
+  print td, os.path.exists(td)
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
