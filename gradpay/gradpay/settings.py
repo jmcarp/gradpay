@@ -112,15 +112,11 @@ WSGI_APPLICATION = 'gradpay.wsgi.application'
 
 import os.path
 PROJECT_DIR = os.path.dirname(__file__)
-print 'hi', PROJECT_DIR
+
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, '../templates'),
-    os.path.join(PROJECT_DIR, 'templates'),
-    os.path.join(PROJECT_DIR, 'gradpay/templates'),
-    #'/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
+    '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
 )
-for td in TEMPLATE_DIRS:
-  print td, os.path.exists(td)
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
@@ -150,11 +146,19 @@ DEFAULT_FROM_EMAIL = 'gradpay@heroku.com'
 #EMAIL_HOST_PASSWORD = ''
 #EMAIL_USE_TLS = False
 
-EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
-EMAIL_HOST = 'smtp.sendgrid.net'
+mail_client = 'gmail'
+
+if mail_client == 'sendgrid':
+  EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
+  EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
+  EMAIL_HOST = 'smtp.sendgrid.net'
+elif mail_client == 'gmail':
+  EMAIL_HOST_USER = os.environ['GMAIL_SMTP_USER']
+  EMAIL_HOST_PASSWORD = os.environ['GMAIL_SMTP_PASSWORD']
+  EMAIL_HOST = 'smtp.gmail.com'
+
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
