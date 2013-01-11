@@ -142,7 +142,7 @@ INSTALLED_APPS = (
 
 # Time limit for django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
-#DEFAULT_FROM_EMAIL = 'foo@bar.com'
+DEFAULT_FROM_EMAIL = 'gradpay@heroku.com'
 
 #EMAIL_HOST = 'localhost'
 #EMAIL_PORT = 1025
