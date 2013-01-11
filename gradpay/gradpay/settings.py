@@ -110,8 +110,11 @@ ROOT_URLCONF = 'gradpay.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'gradpay.wsgi.application'
 
+import os.path
+PROJECT_DIR = os.path.dirname(__file__)
 TEMPLATE_DIRS = (
-    '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
+    os.path.join(PROJECT_DIR, 'templates'),
+    #'/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
 )
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
@@ -170,5 +173,5 @@ LOGGING = {
     }
 }
 
-import dj_database_url
-DATABASES['default'] = dj_database_url.config()
+#import dj_database_url
+#DATABASES['default'] = dj_database_url.config()
