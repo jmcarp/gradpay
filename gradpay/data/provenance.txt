@@ -1,0 +1,3 @@
+
+Carnegie Classification data from http://classifications.carnegiefoundation.org/resources/
+NSF survey data from http://www.nsf.gov/statistics/sed/2011/data_table.cfm

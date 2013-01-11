@@ -1,0 +1,37 @@
+[
+  {
+    "pk": 1, 
+    "model": "gradpay.support", 
+    "fields": {
+      "name": "Teaching assistantship"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gradpay.support", 
+    "fields": {
+      "name": "Research assistantship"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gradpay.support", 
+    "fields": {
+      "name": "University stipend"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "gradpay.support", 
+    "fields": {
+      "name": "External grant/fellowship to student"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "gradpay.support", 
+    "fields": {
+      "name": "External grant/fellowship to supervisor"
+    }
+  }
+]

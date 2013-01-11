@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+
+  <h1>Log in</h1>
+
+  <!-- Non-field errors -->
+  {% if form.non_field_errors %}
+    <ul class="errorlist unstyled">
+    {% for error in form.non_field_errors %}
+      <li class="label label-important">{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form class="form-horizontal" method="post" action="?next={{ next|default:"/" }}">{% csrf_token %}
+
+    <!-- Fields -->
+    {% for field in form %}
+      <div class="control-group">
+        <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+        <div class="controls">
+          {{ field }}
+          {% if field.errors %}
+            <br />
+            <span class="label label-important">
+              {{ field.errors|join:", " }}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Submit button -->
+    <div class="control-group">
+      <div class="controls">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </div>
+
+  </form>
+
+  <p>Don't have an account? Sign up <a href="/accounts/register/">here</a>.
+
+{% endblock %}
