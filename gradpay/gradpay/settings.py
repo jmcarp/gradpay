@@ -114,6 +114,7 @@ import os.path
 PROJECT_DIR = os.path.dirname(__file__)
 print 'hi', PROJECT_DIR
 TEMPLATE_DIRS = (
+    os.path.join(PROJECT_DIR, '../templates'),
     os.path.join(PROJECT_DIR, 'templates'),
     os.path.join(PROJECT_DIR, 'gradpay/templates'),
     #'/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
