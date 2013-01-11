@@ -142,12 +142,19 @@ INSTALLED_APPS = (
 
 # Time limit for django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
+DEFAULT_FROM_EMAIL = 'foo@bar.com'
+
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'foo@bar.com'
+
+EMAIL_HOST = os.environ['SENDGRID_USERNAME']
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
