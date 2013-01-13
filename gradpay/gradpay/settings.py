@@ -16,9 +16,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'gradpay',
         'USER': 'jmcarp',
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
     #'default': {
     #    'ENGINE': 'django.db.backends.sqlite3',
@@ -191,5 +191,5 @@ LOGGING = {
     }
 }
 
-#import dj_database_url
-#DATABASES['default'] = dj_database_url.config()
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
