@@ -8,12 +8,16 @@ def support_to_json(supportname, model, outname):
   supportdicts = []
 
   for supportidx in range(len(supports)):
+    
+    supportline = supports[supportidx]
+    supportvals = supportline.split(';')
 
     supportdict = {}
     supportdict['pk'] = supportidx + 1
     supportdict['model'] = model
     supportdict['fields'] = {
-      'name' : supports[supportidx].strip(),
+      'name' : supportvals[0].strip(),
+      'tooltip' : supportvals[1].strip(),
     }
 
     supportdicts.append(supportdict)

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block extrahead %}
   
@@ -25,11 +26,60 @@
     }
   </style>
 
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+      
+      // Hack: Set margin-top property of help-block items
+      // Otherwise tooltips clear margin
+      // See Issue #6479
+      $('.help-block').css('margin-top', '10px');
+      
+      // Add tooltips from <option>s to <select>s
+      // Adapted from http://stackoverflow.com/questions/13126144/
+      // and http://jsfiddle.net/mM8sx/
+      $('select').each(function() {
+        
+        // Look for <select>s whose <option>s have attr parent-title
+        if ($(this).find('option[parent-title]').length == 0) {
+          return true;
+        }
+        
+        // Get <select> id
+        id = $(this).attr('id');
+        
+        // Destroy tooltip on mouseleave
+        $(this).on('mouseleave', function(e) {
+          $('#' + id).tooltip('destroy');
+        });
+        
+        // Add tooltip on mouseover
+        $(this).on('mouseover', function(e) {
+          e = $(e.target);
+          if (e.is('option')) {
+            $('#' + id).tooltip('destroy');
+            $('#' + id).tooltip({
+              trigger: 'manual',
+              placement: 'right',
+              title: e.attr('parent-title')
+            }).tooltip('show');
+          }
+        });
+
+      });
+
+    });
+  </script>
+
 {% endblock %}
 
 {% block content %}
 
-{% load crispy_forms_tags %}
-{% crispy form %}
+  <div class="hero-unit">
+    <h1>Graduate Support Survey</h1>
+    <p>Take the survey! All responses are confidential and will not be displayed with your account information.</p>
+  </div>
+
+  {% crispy form %}
 
 {% endblock %}

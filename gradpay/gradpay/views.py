@@ -9,15 +9,19 @@ from forms import SurveyForm
 
 def home(request):
   
-  return render_to_response('home.html')
+  return render_to_response('home.html', context_instance=RequestContext(request))
 
 def about(request):
   
-  return render_to_response('about.html')
+  return render_to_response('about.html', context_instance=RequestContext(request))
 
 def results(request):
   
-  return render_to_response('comingsoon.html')
+  return render_to_response('comingsoon.html', context_instance=RequestContext(request))
+
+def contact(request):
+
+  return render_to_response('contact.html', context_instance=RequestContext(request))
 
 @login_required
 def survey(request):

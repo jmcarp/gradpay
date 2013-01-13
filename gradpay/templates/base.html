@@ -1,3 +1,5 @@
+{% load tags %}
+
 <!DOCTYPE html>
 <html>
 
@@ -37,15 +39,19 @@
       <a class="brand" href="/">GradPay</a>
       <div class="nav-collapse">
         <ul class="nav">
-          <li><a href="/"><i class="icon-home"></i> Home</a></li>
-          <li><a href="/survey/">Survey</a></li>
-          <li><a href="/results/">Results</a></li>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/">Contact</a></li>
+          <li class="{% active request "^/$" %}"><a href="/"><i class="icon-home"></i> Home</a></li>
+          <li class="{% active request "^/survey/$" %}"><a href="/survey/">Survey</a></li>
+          <li class="{% active request "^/results/$" %}" ><a href="/results/">Results</a></li>
+          <li class="{% active request "^/about/$" %}"><a href="/about/">About</a></li>
+          <li class="{% active request "^/contact/$" %}"><a href="/contact/">Contact</a></li>
         </ul>
         <ul class="nav pull-right">
-          <li><a href="/accounts/login/"><i class="icon-user icon-black"></i> Sign in</a></li>
-          <li><a href="/accounts/register/">Sign up</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="/accounts/logout/"><i class="icon-user icon-black"></i> Sign out</a></li>
+          {% else %}
+            <li class="{% active request "/^accounts/login/$" %}"><a href="/accounts/login/"><i class="icon-user icon-black"></i> Sign in</a></li>
+            <li class="{% active request "/accounts/register$/" %}"><a href="/accounts/register/">Sign up</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>

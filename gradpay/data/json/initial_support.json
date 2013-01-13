@@ -3,35 +3,40 @@
     "pk": 1, 
     "model": "gradpay.support", 
     "fields": {
-      "name": "Teaching assistantship"
+      "name": "Teaching assistantship", 
+      "tooltip": "Support for work as instructor, teaching assistant, grader, etc."
     }
   }, 
   {
     "pk": 2, 
     "model": "gradpay.support", 
     "fields": {
-      "name": "Research assistantship"
+      "name": "Research assistantship", 
+      "tooltip": "Support for conducting research"
     }
   }, 
   {
     "pk": 3, 
     "model": "gradpay.support", 
     "fields": {
-      "name": "University stipend"
+      "name": "University stipend", 
+      "tooltip": "Support from non-competitive stipend from area, department, or university"
     }
   }, 
   {
     "pk": 4, 
     "model": "gradpay.support", 
     "fields": {
-      "name": "External grant/fellowship to student"
+      "name": "Competitive grant/fellowship to student", 
+      "tooltip": "Support from competitive student grant or fellowship (NSF GRFP, NRSA, etc.)"
     }
   }, 
   {
     "pk": 5, 
     "model": "gradpay.support", 
     "fields": {
-      "name": "External grant/fellowship to supervisor"
+      "name": "Competitive grant/fellowship to supervisor", 
+      "tooltip": "Support from competitive research grant (NSF, NIH, etc.)"
     }
   }
 ]
