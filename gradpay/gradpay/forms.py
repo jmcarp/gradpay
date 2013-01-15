@@ -5,18 +5,20 @@ import datetime
 from django.forms import fields
 from django.forms import ModelForm
 from django.forms.widgets import RadioSelect
-from selectable.forms import AutoCompleteWidget
+from django.forms.widgets import SelectMultiple
 from django.utils.translation import ugettext as _
 
 # Project imports
-from models import Support, Survey
+from models import Discipline, Institution, Support, Survey
 from lookups import DisciplineLookup, InstitutionLookup
-
 from widgets import HelpSelectMultiple
-from django.forms.widgets import SelectMultiple
 
+# Selectable imports
+from selectable.forms import AutoCompleteWidget
+
+# Crispy imports
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, HTML, Field, Fieldset, ButtonHolder, Submit
 
 remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to select more than one.'))
 
@@ -25,17 +27,29 @@ class SurveyForm(ModelForm):
   def __init__(self, *args, **kwargs):
     
     self.helper = FormHelper()
+
     self.helper.form_class = 'form-horizontal'
     self.helper.add_input(Submit('submit', 'Submit'))
 
     # Set up fieldsets
     self.helper.layout = Layout(
+      HTML("""
+        <div class="alert alert-block alert-info">
+          <h4>Note:</h4>
+          Please choose the best answer for each question.
+        </div>
+      """),
       Fieldset(
         'Please describe your training program',
         'institution', 'department', 'area', 'degree', 'start_year', 'stop_year'
       ),
       Fieldset(
         'Please describe your stipend or salary', 
+        HTML("""
+          <div class="alert alert-info">
+            If your support varies from year to year, please answer for the <strong>current</strong> year.
+          </div>
+        """),
         'salary', 'salary_unit', 'salary_types', 'summer_funding', 'tuition', 'contract', 'student_loans'
       ),
       Fieldset(
@@ -65,14 +79,18 @@ class SurveyForm(ModelForm):
     widgets = {
       'department' : AutoCompleteWidget(DisciplineLookup),
       'institution' : AutoCompleteWidget(InstitutionLookup),
-      'salary_types' : HelpSelectMultiple(help_texts=[val[0] for val in Support.objects.values_list('tooltip')]),
+      'salary_types' : HelpSelectMultiple(
+        help_texts=[val[0] for val in Support.objects.values_list('tooltip')]
+      ),
       'satisfaction' : RadioSelect(attrs={'class':'radio'}),
     }
 
   def clean(self):
     
+    # Get cleaned data
     cleaned_data = super(ModelForm, self).clean()
-
+    
+    # Stop year must be later than start year
     start_year = cleaned_data.get('start_year')
     stop_year = cleaned_data.get('stop_year')
 
@@ -80,6 +98,24 @@ class SurveyForm(ModelForm):
       if start_year > stop_year:
         msg = 'Stop year must be greater than or equal to start year.'
         self._errors['stop_year'] = self.error_class([msg])
+
+    # Institution must be in suggestions
+    institution = cleaned_data.get('institution')
+    if institution:
+      try:
+        institution_record = Institution.objects.get(name=institution)
+      except:
+        msg = 'Institution must be chosen from suggestions.'
+        self._errors['institution'] = self.error_class([msg])
+    
+    # Department must be in suggestions
+    department = cleaned_data.get('department')
+    if department:
+      try:
+        department_record = Discipline.objects.get(name=department)
+      except:
+        msg = 'Department must be chosen from suggestions.'
+        self._errors['department'] = self.error_class([msg])
 
     return cleaned_data
 

@@ -20,14 +20,6 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     }
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': '/Users/jmcarp/Dropbox/projects/gradpay/gradpay.db',
-    #    'USER': '',                      # Not used with sqlite3.
-    #    'PASSWORD': '',                  # Not used with sqlite3.
-    #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-    #    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    #}
 }
 
 # Local time zone for this installation. Choices can be found here:
@@ -193,3 +185,8 @@ LOGGING = {
 
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
+
+try:
+  from local_settings import *
+except:
+  pass
