@@ -41,7 +41,7 @@ def survey(request):
       # Save data
       survey_form.save()
       # Redirect
-      return render_to_response('survey_complete.html')
+      return render_to_response('survey_complete.html', context_instance=RequestContext(request))
   else:
     survey_form = SurveyForm(instance=survey)
 

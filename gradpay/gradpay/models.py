@@ -15,14 +15,6 @@ DEGREE_CHOICES = (
   ('OTH', 'Other'),
 )
 
-SALARY_UNIT_CHOICES = (
-  ('MN', 'Monthly'),
-  ('SM', 'Semesterly'),
-  ('YR', 'Yearly'),
-  ('OTH', 'Other'),
-  ('NA', 'Not applicable'),
-)
-
 BENEFIT_CHOICES = (
   ('NO', 'Not provided'),
   ('YES', 'Provided for a fee'),
@@ -111,8 +103,7 @@ class Survey(models.Model):
   stop_year = models.IntegerField(verbose_name='Graduation year', help_text='Year of (expected) graduation [yyyy].')
 
   # Salary
-  salary = models.PositiveIntegerField()
-  salary_unit = models.CharField(max_length=16, choices=SALARY_UNIT_CHOICES)
+  salary = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> salary in $US.')
   salary_types = models.ManyToManyField(Support, help_text='How is your stipend paid? Choose all that apply.')
   contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES)
   summer_funding = models.CharField(max_length=16, choices=SALARY_MISC_CHOICES, help_text='Does your program provide summer funding?')

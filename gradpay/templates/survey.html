@@ -15,15 +15,6 @@
         /* prevent horizontal scrollbar */
         overflow-x: hidden;
     } 
-    .field-width {
-        width: 220px;
-    }
-    .label-form {
-        margin-left: 12px;
-    }
-    .required, .asteriskField {
-        color: #dd514c;
-    }
   </style>
 
   <script type="text/javascript">
@@ -56,11 +47,13 @@
         // Add tooltip on mouseover
         $(this).on('mouseover', function(e) {
           e = $(e.target);
+          place = e.attr('parent-title-placement');
+          place = place ? place : 'right';
           if (e.is('option')) {
             $('#' + id).tooltip('destroy');
             $('#' + id).tooltip({
               trigger: 'manual',
-              placement: 'right',
+              placement: place,
               title: e.attr('parent-title')
             }).tooltip('show');
           }

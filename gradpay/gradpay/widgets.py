@@ -3,7 +3,6 @@ from django.utils.translation import ugettext as _
 from django.utils.encoding import force_unicode
 from django.utils.safestring import mark_safe
 
-import collections
 from itertools import chain
 from django.utils.html import escape, conditional_escape
 from django.forms.widgets import SelectMultiple
@@ -13,7 +12,7 @@ class HelpSelectMultiple(SelectMultiple):
   
     def __init__(self, *args, **kwargs):
         self.help_texts = kwargs.pop('help_texts', [])
-        self.help_place = kwargs.pop('help_places', '')
+        self.help_place = kwargs.pop('help_place', '')
         super(HelpSelectMultiple, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, choices=()):
@@ -49,8 +48,6 @@ class HelpSelectMultiple(SelectMultiple):
         # Normalize to strings.
         selected_choices = set(force_unicode(v) for v in selected_choices)
         output = []
-        if self.help_texts:
-            help_texts = collections.deque(self.help_texts)
         for option_value, option_label in chain(self.choices, choices):
             if isinstance(option_label, (list, tuple)):
                 output.append(u'<optgroup label="%s">' % escape(force_unicode(option_value)))
@@ -59,7 +56,7 @@ class HelpSelectMultiple(SelectMultiple):
                 output.append(u'</optgroup>')
             else:
                 try:
-                    help_text = help_texts.popleft()
+                    help_text = self.help_texts.pop(0)
                 except:
                     help_text = ''
                 output.append(self.render_option(selected_choices, option_value, option_label, help_text))
