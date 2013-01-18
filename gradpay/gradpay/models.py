@@ -95,8 +95,10 @@ class Survey(models.Model):
   time_created = models.DateTimeField(auto_now_add=True)
 
   # Program
-  institution = models.CharField(max_length=256)
-  department = models.CharField(max_length=256)
+  institution = models.ForeignKey(Institution)
+  department = models.ForeignKey(Discipline)
+  #institution = models.CharField(max_length=256)
+  #department = models.CharField(max_length=256)
   area = models.CharField(max_length=256, blank=True)
   degree = models.CharField(max_length=16, choices=DEGREE_CHOICES)
   start_year = models.IntegerField(verbose_name='Start year', help_text='Year you began your program [yyyy].')

@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 from models import Discipline, Institution, Support, Survey
 from lookups import DisciplineLookup, InstitutionLookup
 from widgets import HelpSelectMultiple
+from widgets import FKAutoCompleteWidget
 
 # Selectable imports
 from selectable.forms import AutoCompleteWidget
@@ -24,7 +25,7 @@ from crispy_forms.layout import Layout, HTML, Field, Fieldset, ButtonHolder, Sub
 remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to select more than one.'))
 
 class SurveyForm(ModelForm):
-  
+
   def __init__(self, *args, **kwargs):
     
     self.helper = FormHelper()
@@ -88,8 +89,8 @@ class SurveyForm(ModelForm):
   class Meta:
     model = Survey
     widgets = {
-      'department' : AutoCompleteWidget(DisciplineLookup),
-      'institution' : AutoCompleteWidget(InstitutionLookup),
+      'department' : FKAutoCompleteWidget(DisciplineLookup),
+      'institution' : FKAutoCompleteWidget(InstitutionLookup),
       'salary_types' : HelpSelectMultiple(
         help_texts=[val[0] for val in Support.objects.values_list('tooltip')]
       ),
@@ -121,7 +122,8 @@ class SurveyForm(ModelForm):
         institution_record = Institution.objects.get(name=institution)
       except:
         raise forms.ValidationError(_('Institution must be chosen from suggestions.'))
-
+    
+    return institution_record
     return self.cleaned_data['institution']
 
   def clean_department(self):
@@ -133,5 +135,6 @@ class SurveyForm(ModelForm):
         department_record = Discipline.objects.get(name=department)
       except:
         raise forms.ValidationError(_('Department must be chosen from suggestions.'))
-
+    
+    return department_record
     return self.cleaned_data['department']

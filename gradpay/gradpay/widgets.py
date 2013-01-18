@@ -8,6 +8,21 @@ from django.utils.html import escape, conditional_escape
 from django.forms.widgets import SelectMultiple
 from django.forms.widgets import flatatt
 
+
+from selectable.forms import AutoCompleteWidget
+class FKAutoCompleteWidget(AutoCompleteWidget):
+  
+  def render(self, name, value, attrs=None):
+    if value is None:
+      value = ''
+    final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+    if value != '':
+      # Only add the 'value' attribute if a value is non-empty.
+      model_value = self.lookup_class.model.objects.get(pk=value)
+      final_attrs['value'] = force_unicode(self._format_value(model_value))
+    return mark_safe(u'<input%s />' % flatatt(final_attrs))
+
+
 class HelpSelectMultiple(SelectMultiple):
   
     def __init__(self, *args, **kwargs):

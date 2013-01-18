@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^about/', 'gradpay.views.about', name='about'),
     url(r'^survey/', 'gradpay.views.survey', name='survey'),
     url(r'^results/', 'gradpay.views.results', name='results'),
+    url(r'^results_json', 'gradpay.views.results_json', name='results_json'),
     url(r'^contact/', 'gradpay.views.contact', name='contact'),
     url(
       r'^accounts/register/$', 'registration.views.register',
