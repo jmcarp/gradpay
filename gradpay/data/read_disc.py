@@ -2,6 +2,9 @@
 import json
 import xlrd
 
+datadir = '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/data'
+discname = '%s/raw/tab15.xls' % (datadir)
+
 def read_disc(discname):
   
   book = xlrd.open_workbook(discname)
@@ -42,3 +45,7 @@ def disc_to_json(discs, model, outname):
   out = open(outname, 'w')
   json.dump(discdicts, out, indent=2)
   out.close()
+
+if __name__ == '__main__':
+  discs = read_disc(discname)
+  disc_to_json(discs, 'gradpay.department', '%s/json/initial_department.json' % (datadir))

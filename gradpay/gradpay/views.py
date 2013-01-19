@@ -23,7 +23,7 @@ stored_vars = [
   'department__name',
 ]
 computed_vars = [
-  'avg_salary',
+  'avg_stipend',
   'num_resp',
 ]
 vars = stored_vars + computed_vars
@@ -38,6 +38,7 @@ def results_json(request):
   # Get sEcho [datatables security param]
   sEcho = request.GET.get('sEcho', 0)
 
+  # Get search units
   units = request.GET.get('units', 'institution')
   units = units.split(',')
   for unitidx in range(len(units)):
@@ -47,6 +48,7 @@ def results_json(request):
   if 'institution__name' in units:
     units.append('institution__state')
   
+  # Get search term
   like = request.GET.get('sSearch', '')
   like_lookup = ''
   if like:
@@ -54,21 +56,16 @@ def results_json(request):
     for var in stored_vars[1:]:
       like_lookup = like_lookup | Q(**{var + '__icontains' : like})
 
-  order = request.GET.get('order', 'institution__name')
   sort_col = request.GET.get('iSortCol_0', '0')
-  try:
-    sort_col = int(sort_col)
-  except:
-    sort_col = 0
+  sort_col = int(sort_col)
   sort_var = vars[sort_col]
+
+  # Get sort direction
   sort_dir = request.GET.get('sSortDir_0', 'dsc')
-  try:
-    sort_sign = sort_map[sort_dir]
-  except:
-    sort_sign = '-'
-  direc = request.GET.get('direc', '-')
+  sort_sign = sort_map[sort_dir]
   order_by = sort_sign + sort_var
 
+  # Get offset and limit
   offset = request.GET.get('iDisplayStart', 0)
   offset = max(0, int(offset))
   limit = request.GET.get('iDisplayLength', 10)
@@ -80,8 +77,8 @@ def results_json(request):
   if like_lookup:
     rows = rows.filter(like_lookup)
 
-  # Compute average salary
-  rows = rows.values(*units).annotate(avg_salary=Avg('salary'), num_resp=Count('salary'))
+  # Compute average stipend
+  rows = rows.values(*units).annotate(avg_stipend=Avg('stipend'), num_resp=Count('stipend'))
   
   # Order
   rows = rows.order_by(order_by)
@@ -120,7 +117,7 @@ def about(request):
 
 def results(request):
   
-  return render_to_response('comingsoon.html', {'skip_fluid' : True}, context_instance=RequestContext(request))
+  return render_to_response('results.html', {'skip_fluid' : True}, context_instance=RequestContext(request))
 
 def contact(request):
 

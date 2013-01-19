@@ -1,6 +1,9 @@
 # Imports
 import json
 
+datadir = '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/data'
+supportname = '%s/raw/support.csv' % (datadir)
+
 def support_to_json(supportname, model, outname):
   
   supports = open(supportname, 'r').readlines()
@@ -25,3 +28,6 @@ def support_to_json(supportname, model, outname):
   out = open(outname, 'w')
   json.dump(supportdicts, out, indent=2)
   out.close()
+
+if __name__ == '__main__':
+  support_to_json(supportname, 'gradpay.support', '%s/initial_support.json' % (datadir))

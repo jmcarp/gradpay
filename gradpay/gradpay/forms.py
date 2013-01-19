@@ -6,12 +6,11 @@ from django import forms
 from django.forms import fields
 from django.forms import ModelForm
 from django.forms.widgets import RadioSelect
-from django.forms.widgets import SelectMultiple
 from django.utils.translation import ugettext as _
 
 # Project imports
-from models import Discipline, Institution, Support, Survey
-from lookups import DisciplineLookup, InstitutionLookup
+from models import Department, Institution, Support, Survey
+from lookups import DepartmentLookup, InstitutionLookup
 from widgets import HelpSelectMultiple
 from widgets import FKAutoCompleteWidget
 
@@ -43,7 +42,7 @@ class SurveyForm(ModelForm):
       """),
       Fieldset(
         'Please describe your training program',
-        'institution', 'department', 'area', 'degree', 'start_year', 'stop_year'
+        'institution', 'department', 'area', 'degree', 'start_year', 'graduation_year'
       ),
       Fieldset(
         'Please describe your stipend or salary', 
@@ -52,7 +51,7 @@ class SurveyForm(ModelForm):
             If your support varies from year to year, please answer for the <strong>current</strong> year.
           </div>
         """),
-        'salary', 'salary_types', 'summer_funding', 'tuition', 'contract', 'student_loans'
+        'stipend', 'support_types', 'summer_stipend', 'tuition_coverage', 'contract', 'student_loans'
       ),
       Fieldset(
         'Please describe your health benefits', 
@@ -89,7 +88,7 @@ class SurveyForm(ModelForm):
   class Meta:
     model = Survey
     widgets = {
-      'department' : FKAutoCompleteWidget(DisciplineLookup),
+      'department' : FKAutoCompleteWidget(DepartmentLookup),
       'institution' : FKAutoCompleteWidget(InstitutionLookup),
       'salary_types' : HelpSelectMultiple(
         help_texts=[val[0] for val in Support.objects.values_list('tooltip')]
@@ -132,7 +131,7 @@ class SurveyForm(ModelForm):
     department = self.cleaned_data.get('department')
     if department:
       try:
-        department_record = Discipline.objects.get(name=department)
+        department_record = Department.objects.get(name=department)
       except:
         raise forms.ValidationError(_('Department must be chosen from suggestions.'))
     

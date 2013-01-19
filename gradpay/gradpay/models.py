@@ -1,18 +1,13 @@
 # Django imports
-from django import forms
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 
-def add_not_sure(choices):
-  return choices + (('NS', 'Not sure'),)
+# Form choices
 
-# Form options
 DEGREE_CHOICES = (
-  ('MR', 'MA/MS only'),
-  ('PHD', 'PhD only'),
-  ('MRPHD', 'MA/MS and PhD'),
-  ('OTH', 'Other'),
+  ('MR', 'Master\'s (MA, MS) only'),
+  ('DC', 'Doctoral (PhD) only'),
+  ('MRDC', 'Master\'s and doctoral'),
 )
 
 BENEFIT_CHOICES = (
@@ -22,36 +17,45 @@ BENEFIT_CHOICES = (
   ('NS', 'Not sure'),
 )
 
-SALARY_MISC_CHOICES = (
-  ('NO', 'No funding available'),
-  ('GT', 'Can apply for funding'),
-  ('PT', 'Partial funding provided'),
-  ('FL', 'Full funding provided'),
+SUMMER_STIPEND_CHOICES = (
+  ('NO', 'No summer stipend available'),
+  ('GT', 'Can apply for summer stipend'),
+  ('PT', 'Partial summer stipend provided'),
+  ('FL', 'Full summer stipend provided'),
+  ('NS', 'Not sure'),
+)
+
+TUITION_CHOICES = (
+  ('NO', 'No tuition support available'),
+  ('GT', 'Can apply for tuition support'),
+  ('PT', 'Partial tuition support provided'),
+  ('FL', 'Full tuition support provided'),
+  ('NA', 'Not applicable: No tuition costs'),
   ('NS', 'Not sure'),
 )
 
 CONTRACT_CHOICES = (
-  ('YR', 'Re-negotiated every year'),
-  ('CT', 'Negotiated at start of program'),
-  ('NA', 'No support provided'),
+  ('YR', 'Each semester or year'),
+  ('CT', 'Once at start of program (for entire program)'),
+  ('NA', 'No contract / no support provided'),
   ('NS', 'Not sure'),
 )
 
 LOAN_CHOICES = (
-  ('YS', 'Yes'),
-  ('NO', 'No'),
+  ('YS', 'Have taken or will take loans'),
+  ('NO', 'Have not taken and will not take loans'),
   ('NS', 'Not sure'),
 )
 
 SATISFACTION_CHOICES = (
-  ('1', 'Very dissatisfied'),
-  ('2', 'Somewhat dissatisfied'),
-  ('3', 'Neither satisfied nor dissatisfied'),
-  ('4', 'Somewhat satisfied'),
   ('5', 'Very satisfied'),
+  ('4', 'Somewhat satisfied'),
+  ('3', 'Neither satisfied nor dissatisfied'),
+  ('2', 'Somewhat dissatisfied'),
+  ('1', 'Very dissatisfied'),
 )
 
-class Discipline(models.Model):
+class Department(models.Model):
   """
   Field of study.
   """
@@ -96,20 +100,18 @@ class Survey(models.Model):
 
   # Program
   institution = models.ForeignKey(Institution)
-  department = models.ForeignKey(Discipline)
-  #institution = models.CharField(max_length=256)
-  #department = models.CharField(max_length=256)
+  department = models.ForeignKey(Department)
   area = models.CharField(max_length=256, blank=True)
   degree = models.CharField(max_length=16, choices=DEGREE_CHOICES)
   start_year = models.IntegerField(verbose_name='Start year', help_text='Year you began your program [yyyy].')
-  stop_year = models.IntegerField(verbose_name='Graduation year', help_text='Year of (expected) graduation [yyyy].')
+  graduation_year = models.IntegerField(verbose_name='Graduation year', help_text='Year of (expected) graduation [yyyy].')
 
-  # Salary
-  salary = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> salary in $US.')
-  salary_types = models.ManyToManyField(Support, help_text='How is your stipend paid? Choose all that apply.')
-  contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES)
-  summer_funding = models.CharField(max_length=16, choices=SALARY_MISC_CHOICES, help_text='Does your program provide summer funding?')
-  tuition = models.CharField(max_length=16, choices=SALARY_MISC_CHOICES, help_text='Does your program pay your tuition?')
+  # Stipend
+  stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> stipend or salary in US$.')
+  support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
+  summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Does your program provide a summer stipend?')
+  tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Does your program pay for your tuition?')
+  contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract or other agreement describing your support, how often is it negotiated?')
   student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your program?')
   
   # Benefits
@@ -117,7 +119,6 @@ class Survey(models.Model):
   dental_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide dental benefits?')
   vision_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
 
-  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your funding?', blank=False, default='Unspecified')
-
-  # Comments
-  comments = models.TextField(blank=True)
+  # Summary
+  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your funding?', blank=False, default='...')
+  comments = models.TextField(blank=True, help_text='Enter any comments about your funding here.')

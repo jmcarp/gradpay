@@ -1,11 +1,11 @@
 from selectable.base import ModelLookup
 from selectable.registry import registry, LookupAlreadyRegistered
 
-from models import Discipline, Institution
+from models import Department, Institution
 
-class DisciplineLookup(ModelLookup):
+class DepartmentLookup(ModelLookup):
   
-  model = Discipline
+  model = Department
   search_fields = ('name__icontains',)
 
 class InstitutionLookup(ModelLookup):
@@ -13,7 +13,7 @@ class InstitutionLookup(ModelLookup):
   model = Institution
   search_fields = ('name__icontains',)
 
-for lookup in [DisciplineLookup, InstitutionLookup]:
+for lookup in [DepartmentLookup, InstitutionLookup]:
   try:
     registry.register(lookup)
   except LookupAlreadyRegistered:
