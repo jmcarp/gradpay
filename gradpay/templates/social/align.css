@@ -1,0 +1,13 @@
+<style>
+div .social {
+  font-size: 1px;
+  display: inline-block;
+  height: 200px;
+  float: left;
+  padding: 8px;
+}
+
+div .fb_reset {
+  display: inline;
+}
+</style>

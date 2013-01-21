@@ -9,12 +9,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+{% include "social/facebook-opengraph.html" %}
+
 {% load selectable_tags %}
 {% include_jquery_libs %}
 <link href="{{ STATIC_URL }}css/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+
+{% include "social/align.css" %}
 
 <style>
   body {
@@ -30,6 +34,9 @@
 </head>
 
 <body>
+
+{% include "social/facebook-sdk.html" %}
+{% include "social/facebook-sdk-init.html" %}
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -59,6 +66,8 @@
     </div>
   </div>
 </div>
+
+{% include "social/social.html" %}
 
 {% if not skip_fluid %}
   <div class="row-fluid">
