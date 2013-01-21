@@ -107,6 +107,10 @@ def results_json(request):
   # Return JSON
   return HttpResponse(json_data, mimetype='application/json')
 
+def channel(request):
+  
+  return render_to_response('social/facebook-channel.html')
+
 def home(request):
   
   return render_to_response('home.html', context_instance=RequestContext(request))
