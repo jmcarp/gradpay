@@ -8,7 +8,6 @@ from django.utils.html import escape, conditional_escape
 from django.forms.widgets import SelectMultiple
 from django.forms.widgets import flatatt
 
-
 from selectable.forms import AutoCompleteWidget
 class FKAutoCompleteWidget(AutoCompleteWidget):
   

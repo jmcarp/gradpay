@@ -1,6 +1,7 @@
 # Django settings for gradpay project.
 
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -10,6 +11,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 LOGIN_REDIRECT_URL = '/'
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 DATABASES = {
     'default': {
@@ -127,6 +129,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'django.contrib.humanize',
     'django.contrib.admin',
+    'gunicorn',
     'gradpay',
 )
 

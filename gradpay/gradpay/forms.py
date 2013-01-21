@@ -90,7 +90,7 @@ class SurveyForm(ModelForm):
     widgets = {
       'department' : FKAutoCompleteWidget(DepartmentLookup),
       'institution' : FKAutoCompleteWidget(InstitutionLookup),
-      'salary_types' : HelpSelectMultiple(
+      'support_types' : HelpSelectMultiple(
         help_texts=[val[0] for val in Support.objects.values_list('tooltip')]
       ),
       'satisfaction' : RadioSelect(attrs={'class':'radio'}),
