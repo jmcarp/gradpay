@@ -1,1 +1,1 @@
-web: gunicorn gradpay.gradpay.wsgi
+web: gunicorn gradpay.wsgi
