@@ -7,8 +7,9 @@ from django.contrib.auth import views as auth_views
 from regform import CustomAuthenticationForm, CustomRegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 
+import settings
+
 urlpatterns = patterns('',
-    # Examples:
     url(r'^$', 'gradpay.views.home', name='home'),
     url(r'^about/$', 'gradpay.views.about', name='about'),
     url(r'^survey/$', 'gradpay.views.survey', name='survey'),
@@ -36,5 +37,5 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
     (r'^selectable/', include('selectable.urls')),
-    (r’^static/(?P.*)$’, ‘django.views.static.serve’, {‘document_root’: settings.STATIC_ROOT}),
+    (r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
 )
