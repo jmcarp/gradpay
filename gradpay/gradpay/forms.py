@@ -24,6 +24,9 @@ from crispy_forms.layout import Layout, HTML, Field, Fieldset, ButtonHolder, Sub
 remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to select more than one.'))
 
 class SurveyForm(ModelForm):
+  
+  institution = forms.CharField(max_length=256, widget=FKAutoCompleteWidget(InstitutionLookup))
+  department = forms.CharField(max_length=256, widget=FKAutoCompleteWidget(DepartmentLookup))
 
   def __init__(self, *args, **kwargs):
     
@@ -36,7 +39,6 @@ class SurveyForm(ModelForm):
     self.helper.layout = Layout(
       HTML("""
         <div class="alert alert-block alert-info">
-          <h4>Note:</h4>
           Please choose the best answer for each question.
         </div>
       """),
@@ -87,9 +89,9 @@ class SurveyForm(ModelForm):
 
   class Meta:
     model = Survey
+    #  'department' : FKAutoCompleteWidget(DepartmentLookup),
+    #  'institution' : FKAutoCompleteWidget(InstitutionLookup),
     widgets = {
-      'department' : FKAutoCompleteWidget(DepartmentLookup),
-      'institution' : FKAutoCompleteWidget(InstitutionLookup),
       'support_types' : HelpSelectMultiple(
         help_texts=[val[0] for val in Support.objects.values_list('tooltip')]
       ),
@@ -109,11 +111,10 @@ class SurveyForm(ModelForm):
       if start_year > stop_year:
         msg = 'Stop year must be greater than or equal to start year.'
         self._errors['stop_year'] = self.error_class([msg])
-
     return cleaned_data
 
   def clean_institution(self):
-  
+    
     # Institution must be in suggestions
     institution = self.cleaned_data.get('institution')
     if institution:
@@ -126,7 +127,7 @@ class SurveyForm(ModelForm):
     return self.cleaned_data['institution']
 
   def clean_department(self):
-
+    
     # Department must be in suggestions
     department = self.cleaned_data.get('department')
     if department:

@@ -17,10 +17,12 @@ class FKAutoCompleteWidget(AutoCompleteWidget):
     final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
     if value != '':
       # Only add the 'value' attribute if a value is non-empty.
-      model_value = self.lookup_class.model.objects.get(pk=value)
+      try:
+        model_value = self.lookup_class.model.objects.get(pk=value)
+      except:
+        model_value = value
       final_attrs['value'] = force_unicode(self._format_value(model_value))
     return mark_safe(u'<input%s />' % flatatt(final_attrs))
-
 
 class HelpSelectMultiple(SelectMultiple):
   

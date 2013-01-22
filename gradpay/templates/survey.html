@@ -4,9 +4,10 @@
 {% block extrahead %}
   
   {{ form.media.css }}
-  {{ form.media.js }}
+  {% comment %}{{ form.media.js }}{% endcomment %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
 
-  <link href="{{ STATIC_URL }}/bootstrap-autocomplete.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}bootstrap-autocomplete.css" rel="stylesheet">
 
   <style>
      .ui-autocomplete {
@@ -71,7 +72,7 @@
 
 {% block content %}
 
-  <div class="hero-unit">
+  <div class="page-header">
     <h1>Graduate Support Survey</h1>
     <p>Take the survey! All responses are confidential and will not be displayed with your account information.</p>
   </div>
