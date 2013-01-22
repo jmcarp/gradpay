@@ -5,7 +5,7 @@ import datetime
 from django import forms
 from django.forms import fields
 from django.forms import ModelForm
-from django.forms.widgets import RadioSelect
+from django.forms.widgets import SelectMultiple, RadioSelect
 from django.utils.translation import ugettext as _
 
 # Project imports
@@ -26,7 +26,7 @@ remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to selec
 class SurveyForm(ModelForm):
   
   institution = forms.CharField(max_length=256, widget=FKAutoCompleteWidget(InstitutionLookup))
-  department = forms.CharField(max_length=256, widget=FKAutoCompleteWidget(DepartmentLookup))
+  department = forms.CharField(max_length=256, label='Field of study', help_text='Choose the best available option. Be as specific as possible.', widget=FKAutoCompleteWidget(DepartmentLookup))
 
   def __init__(self, *args, **kwargs):
     
@@ -44,13 +44,15 @@ class SurveyForm(ModelForm):
       """),
       Fieldset(
         'Please describe your training program',
-        'institution', 'department', 'area', 'degree', 'start_year', 'graduation_year'
+        'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year'
       ),
       Fieldset(
         'Please describe your stipend or salary', 
         HTML("""
           <div class="alert alert-info">
-            If your support varies from year to year, please answer for the <strong>current</strong> year.
+            If you are a current student, please answer for the <strong>current</strong> year only.
+            <br />
+            If you have already graduated, please answer for the <strong>last</strong> year of your program.
           </div>
         """),
         'stipend', 'support_types', 'summer_stipend', 'tuition_coverage', 'contract', 'student_loans'
@@ -82,6 +84,8 @@ class SurveyForm(ModelForm):
         field.widget.attrs['required'] = 'required'
       if isinstance(field, fields.IntegerField):
         field.widget.input_type = 'number'
+      if isinstance(field.widget, SelectMultiple):
+        field.widget.attrs['size'] = len(field.choices)
       if hasattr(field, 'min_value') and field.min_value is not None:
         field.widget.attrs['min'] = field.min_value
       if hasattr(field, 'max_value') and field.max_value is not None:
@@ -89,8 +93,6 @@ class SurveyForm(ModelForm):
 
   class Meta:
     model = Survey
-    #  'department' : FKAutoCompleteWidget(DepartmentLookup),
-    #  'institution' : FKAutoCompleteWidget(InstitutionLookup),
     widgets = {
       'support_types' : HelpSelectMultiple(
         help_texts=[val[0] for val in Support.objects.values_list('tooltip')]

@@ -5,9 +5,14 @@ from django.contrib.auth.models import User
 # Form choices
 
 DEGREE_CHOICES = (
-  ('MR', 'Master\'s (MA, MS) only'),
-  ('DC', 'Doctoral (PhD) only'),
-  ('MRDC', 'Master\'s and doctoral'),
+  ('MR', 'Master\'s (MA, MS, MSW, etc.)'),
+  ('DC', 'Doctoral (PhD)'),
+  ('MD', 'Doctor of Medicine (MD)'),
+)
+
+INTERNATIONAL_CHOICES = (
+  ('YS', 'Yes'),
+  ('NO', 'No'),
 )
 
 BENEFIT_CHOICES = (
@@ -42,8 +47,8 @@ CONTRACT_CHOICES = (
 )
 
 LOAN_CHOICES = (
-  ('YS', 'Have taken or will take loans'),
-  ('NO', 'Have not taken and will not take loans'),
+  ('YS', 'Yes: Have taken or plan to take loans'),
+  ('NO', 'No: Have not taken and do not plan to take loans'),
   ('NS', 'Not sure'),
 )
 
@@ -78,6 +83,16 @@ class Institution(models.Model):
   def __unicode__(self):
     return self.name
 
+class Degree(models.Model):
+  """
+  Degree.
+  """
+  
+  name = models.CharField(max_length=256)
+
+  def __unicode__(self):
+    return self.name
+
 class Support(models.Model):
   """
   Source of financial support.
@@ -100,11 +115,12 @@ class Survey(models.Model):
 
   # Program
   institution = models.ForeignKey(Institution)
-  department = models.ForeignKey(Department)
-  area = models.CharField(max_length=256, blank=True)
-  degree = models.CharField(max_length=16, choices=DEGREE_CHOICES)
-  start_year = models.IntegerField(verbose_name='Start year', help_text='Year you began your program [yyyy].')
-  graduation_year = models.IntegerField(verbose_name='Graduation year', help_text='Year of (expected) graduation [yyyy].')
+  department = models.ForeignKey(Department, help_text='Choose the best available option. Be as specific as possible.')
+  degree = models.ManyToManyField(Degree, help_text='Which degree(s) are you pursuing? Check all that apply.')
+  start_year = models.IntegerField(help_text='Year you began your program [yyyy].')
+  graduation_year = models.IntegerField(help_text='Year of (expected) graduation [yyyy].')
+  #international_student = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Are you an international student?')
+  international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
 
   # Stipend
   stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> stipend or salary in US$.')
@@ -120,5 +136,5 @@ class Survey(models.Model):
   vision_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
 
   # Summary
-  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your funding?', blank=False, default='...')
-  comments = models.TextField(blank=True, help_text='Enter any comments about your funding here.')
+  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your support?', blank=False, default='...')
+  comments = models.TextField(blank=True, help_text='Enter any comments about your support here.')

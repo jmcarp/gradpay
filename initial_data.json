@@ -1,6 +1,27 @@
 [
   {
     "pk": 1, 
+    "model": "gradpay.degree", 
+    "fields": {
+      "name": "Master's (MA, MS, MSW, etc.)"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gradpay.degree", 
+    "fields": {
+      "name": "Doctor of Medicine (MD)"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gradpay.degree", 
+    "fields": {
+      "name": "Doctor of Philosophy (PhD)"
+    }
+  }, 
+  {
+    "pk": 1, 
     "model": "gradpay.department", 
     "fields": {
       "name": "Agricultural and horticultural plant breeding"
