@@ -63,6 +63,7 @@ class HelpSelectMultiple(SelectMultiple):
     def render_options(self, choices, selected_choices):
         # Normalize to strings.
         selected_choices = set(force_unicode(v) for v in selected_choices)
+        help_texts = self.help_texts[:]
         output = []
         for option_value, option_label in chain(self.choices, choices):
             if isinstance(option_label, (list, tuple)):
@@ -72,7 +73,7 @@ class HelpSelectMultiple(SelectMultiple):
                 output.append(u'</optgroup>')
             else:
                 try:
-                    help_text = self.help_texts.pop(0)
+                    help_text = help_texts.pop(0)
                 except:
                     help_text = ''
                 output.append(self.render_option(selected_choices, option_value, option_label, help_text))

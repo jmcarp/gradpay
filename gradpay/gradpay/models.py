@@ -119,16 +119,15 @@ class Survey(models.Model):
   degree = models.ManyToManyField(Degree, help_text='Which degree(s) are you pursuing? Check all that apply.')
   start_year = models.IntegerField(help_text='Year you began your program [yyyy].')
   graduation_year = models.IntegerField(help_text='Year of (expected) graduation [yyyy].')
-  #international_student = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Are you an international student?')
   international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
 
   # Stipend
   stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> stipend or salary in US$.')
   support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
-  summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Does your program provide a summer stipend?')
-  tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Does your program pay for your tuition?')
-  contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract or other agreement describing your support, how often is it negotiated?')
-  student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your program?')
+  summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Do you receive a summer stipend?')
+  tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Are you tution fees covered, if any?')
+  contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
+  student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your graduate program?')
   
   # Benefits
   health_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide health benefits?')
