@@ -43,11 +43,11 @@ class SurveyForm(ModelForm):
         </div>
       """),
       Fieldset(
-        'Please describe your training program',
+        'Program details',
         'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year'
       ),
       Fieldset(
-        'Please describe your stipend or salary', 
+        'Stipend and support: Current academic year',
         HTML("""
           <div class="alert alert-info">
             If you are a current student, please answer for the <strong>current</strong> year only.
@@ -55,14 +55,18 @@ class SurveyForm(ModelForm):
             If you have already graduated, please answer for the <strong>last</strong> year of your program.
           </div>
         """),
-        'stipend', 'support_types', 'summer_stipend', 'tuition_coverage', 'contract', 'student_loans'
+        'stipend', 'support_types', 'summer_stipend', 'tuition_coverage'
       ),
       Fieldset(
-        'Please describe your health benefits', 
+        'Stipend and support: General',
+        'total_terms', 'teaching_terms', 'research_terms', 'contract', 'student_loans'
+      ),
+      Fieldset(
+        'Health benefits',
         'health_benefits', 'dental_benefits', 'vision_benefits'
       ),
       Fieldset(
-        'Please enter any additional comments', 
+        'General comments',
         'satisfaction', 'comments'
       )
     )
@@ -113,6 +117,20 @@ class SurveyForm(ModelForm):
       if start_year > stop_year:
         msg = 'Stop year must be greater than or equal to start year.'
         self._errors['stop_year'] = self.error_class([msg])
+    
+    # Teaching terms must be <= total terms
+    total_terms = cleaned_data.get('total_terms')
+    teaching_terms = cleaned_data.get('teaching_terms')
+    research_terms = cleaned_data.get('research_terms')
+
+    if teaching_terms and total_terms:
+      if teaching_terms > total_terms:
+        self._errors['teaching_terms'] = self.error_class(['Teaching terms must be less than or equal to total terms'])
+    if research_terms and total_terms:
+      if teaching_terms > total_terms:
+        self._errors['research_terms'] = self.error_class(['Research terms must be less than or equal to total terms'])
+
+    # Return cleaned data
     return cleaned_data
 
   def clean_institution(self):
