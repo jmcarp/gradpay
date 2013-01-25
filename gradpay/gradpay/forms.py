@@ -59,7 +59,7 @@ class SurveyForm(ModelForm):
       ),
       Fieldset(
         'Stipend and support: General',
-        'total_terms', 'teaching_terms', 'research_terms', 'contract', 'student_loans'
+        'total_terms', 'teaching_terms', 'contract', 'student_loans'
       ),
       Fieldset(
         'Health benefits',
