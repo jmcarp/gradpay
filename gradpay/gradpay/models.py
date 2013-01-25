@@ -1,6 +1,7 @@
 # Django imports
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 # Form choices
 
@@ -46,9 +47,15 @@ CONTRACT_CHOICES = (
   ('NS', 'Not sure'),
 )
 
+PART_TIME_CHOICES = (
+  ('YS', 'Yes: Have or plan to work at a part-time job'),
+  ('NO', 'No: Have not and do not plan to work at a part-time job'),
+  ('NS', 'Not sure')
+)
+
 LOAN_CHOICES = (
-  ('YS', 'Yes: Have taken or plan to take loans'),
-  ('NO', 'No: Have not taken and do not plan to take loans'),
+  ('YS', 'Yes: Have or plan to take loans'),
+  ('NO', 'No: Have not and do not plan to take loans'),
   ('NS', 'Not sure'),
 )
 
@@ -58,6 +65,7 @@ SATISFACTION_CHOICES = (
   ('3', 'Neither satisfied nor dissatisfied'),
   ('2', 'Somewhat dissatisfied'),
   ('1', 'Very dissatisfied'),
+  ('NA', 'Not applicable: No support or benefits')
 )
 
 class Department(models.Model):
@@ -128,9 +136,10 @@ class Survey(models.Model):
   tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Are your tuition fees covered?')
 
   # General support
-  total_terms = models.IntegerField(help_text='Total number of terms you expect to be enrolled in your program.')
-  teaching_terms = models.IntegerField(help_text='Total number of terms you expect to work as a teaching assistant or instructor.')
+  total_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to be enrolled in your program.', validators=[MinValueValidator(1)])
+  teaching_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to work as a teaching assistant or instructor.')
   contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
+  part_time_work = models.CharField(max_length=16, choices=PART_TIME_CHOICES, verbose_name='Part-time work', help_text='Have you or do you plan to work at a part-time job during your graduate program?')
   student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your graduate program?')
   
   # Benefits
@@ -139,5 +148,5 @@ class Survey(models.Model):
   vision_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
 
   # Summary
-  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your support?', blank=False, default='...')
-  comments = models.TextField(blank=True, help_text='Enter any comments about your support here.')
+  satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')
+  comments = models.TextField(blank=True, help_text='Enter any comments about your financial support and benefits here.')
