@@ -129,7 +129,7 @@ class Survey(models.Model):
 
   # General support
   total_terms = models.IntegerField(help_text='Total number of terms you expect to be enrolled in your program.')
-  teaching_terms = models.IntegerField(help_text='Number of terms you expect to work as a teaching assistant or instructor.')
+  teaching_terms = models.IntegerField(help_text='Total number of terms you expect to work as a teaching assistant or instructor.')
   contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
   student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your graduate program?')
   
