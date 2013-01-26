@@ -20,6 +20,14 @@ $(document).ready(function() {
     'bProcessing' : true,
     'bServerSide' : true,
     'sAjaxSource' : '/results_json?units=institution,department',
+    'aoColumns' : [
+      { 'sWidth' : '25%' },
+      { 'sWidth' : '12.5%' },
+      { 'sWidth' : '25%' },
+      { 'sWidth' : '12.5%' },
+      { 'sWidth' : '12.5%' },
+      { 'sWidth' : '12.5%' },
+    ],
   } );
 } );
 
@@ -47,7 +55,8 @@ $(document).ready(function() {
           <th>Institution</th>
           <th>State</th>
           <th>Department</th>
-          <th>Average salary</th>
+          <th>Salary</th>
+          <th>Teaching %</th>
           <th>Responses</th>
         </tr>
       </thead>
@@ -63,7 +72,8 @@ $(document).ready(function() {
           <th>Institution</th>
           <th>State</th>
           <th>Department</th>
-          <th>Average salary</th>
+          <th>Salary</th>
+          <th>Teaching %</th>
           <th>Responses</th>
         </tr>
       </tfoot>

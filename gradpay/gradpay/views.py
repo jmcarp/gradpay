@@ -17,6 +17,30 @@ relation_map = {
   'department' : 'name',
 }
 
+def fmt_factory(pct, rnd):
+  def fmt(num):
+    if not isinstance(num, float):
+      return num
+    app = ''
+    if pct:
+      num *= 100
+      app = '%'
+    num = round(num, rnd)
+    if rnd == 0:
+      num = int(num)
+    return '%s%s' % (num, app)
+  return fmt
+
+def row_extract(row, var):
+  if isinstance(var, tuple):
+    return var[1](row[var[0]])
+  return row[var]
+
+def var_name(var):
+  if isinstance(var, tuple):
+    return var[0]
+  return var
+
 stored_vars = [
   'institution__name',
   'institution__state',
@@ -24,13 +48,14 @@ stored_vars = [
 ]
 computed_vars = [
   'avg_stipend',
+  ('avg_teach_frac', fmt_factory(True, 0)),
   'num_resp',
 ]
 vars = stored_vars + computed_vars
 
 sort_map = {
   'asc' : '',
-  'dsc' : '-',
+  'desc' : '-',
 }
 
 def results_json(request):
@@ -78,7 +103,11 @@ def results_json(request):
     rows = rows.filter(like_lookup)
 
   # Compute average stipend
-  rows = rows.values(*units).annotate(avg_stipend=Avg('stipend'), num_resp=Count('stipend'))
+  rows = rows.values(*units).annotate(
+    avg_stipend=Avg('stipend'), 
+    avg_teach_frac=Avg('_teaching_fraction'), 
+    num_resp=Count('stipend')
+  )
   
   # Order
   rows = rows.order_by(order_by)
@@ -91,7 +120,8 @@ def results_json(request):
 
   aaData = []
   for row in rows:
-    aaData.append([row[var] for var in vars if var in row])
+    aaData.append([row_extract(row, var) for var in vars if var_name(var) in row])
+    #aaData.append([row[var] for var in vars if var in row])
 
   # Assemble data
   data = {
