@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 # Import models
 from models import Survey
-from forms import SurveyForm
+from forms import ResultForm, SurveyForm
 
 import json
 from django.http import HttpResponse
@@ -13,8 +13,9 @@ from django.db.models import Avg, Count
 from django.db.models import Q
 
 relation_map = {
-  'institution' : 'name',
-  'department' : 'name',
+  'institution' : 'institution__name',
+  'state' : 'institution__state',
+  'department' : 'department__name',
 }
 
 def fmt_factory(pct, rnd):
@@ -58,6 +59,11 @@ sort_map = {
   'desc' : '-',
 }
 
+annotate_map = {
+  'avg_stipend'    : Avg('stipend'), 
+  'avg_teach_frac' : Avg('_teaching_fraction'), 
+  'num_resp'       : Count('stipend'),
+}
 def results_json(request):
   
   # Get sEcho [datatables security param]
@@ -66,13 +72,18 @@ def results_json(request):
   # Get search units
   units = request.GET.get('units', 'institution')
   units = units.split(',')
-  for unitidx in range(len(units)):
-    unit = units[unitidx]
-    if unit in relation_map:
-      units[unitidx] += '__' + relation_map[unit]
-  if 'institution__name' in units:
-    units.append('institution__state')
+  units = [relation_map[unit] for unit in units if unit in relation_map]
   
+  # Get display variables
+  display_variables = request.GET.get('display', 'salary')
+  display_variables = display_variables.split(',')
+  if not display_variables[0]:
+    display_variables = [] 
+  display_variables.append('num_resp')
+  annotate_args = {}
+  for dv in display_variables:
+    annotate_args[dv] = annotate_map[dv]
+
   # Get search term
   like = request.GET.get('sSearch', '')
   like_lookup = ''
@@ -103,11 +114,12 @@ def results_json(request):
     rows = rows.filter(like_lookup)
 
   # Compute average stipend
-  rows = rows.values(*units).annotate(
-    avg_stipend=Avg('stipend'), 
-    avg_teach_frac=Avg('_teaching_fraction'), 
-    num_resp=Count('stipend')
-  )
+  rows = rows.values(*units).annotate(**annotate_args)
+  #rows = rows.values(*units).annotate(
+  #  avg_stipend=Avg('stipend'), 
+  #  avg_teach_frac=Avg('_teaching_fraction'), 
+  #  num_resp=Count('stipend')
+  #)
   
   # Order
   rows = rows.order_by(order_by)
@@ -151,7 +163,8 @@ def about(request):
 
 def results(request):
   
-  return render_to_response('results.html', {'skip_fluid' : True}, context_instance=RequestContext(request))
+  result_form = ResultForm()
+  return render_to_response('results.html', {'skip_fluid' : True, 'form' : result_form}, context_instance=RequestContext(request))
 
 def contact(request):
 

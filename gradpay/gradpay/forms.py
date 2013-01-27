@@ -19,9 +19,54 @@ from selectable.forms import AutoCompleteWidget
 
 # Crispy imports
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, HTML, Field, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, HTML, Div, Field, Fieldset, ButtonHolder, Button, Submit
 
 remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to select more than one.'))
+
+class ResultForm(forms.Form):
+  
+  grouping_variables = forms.MultipleChoiceField(required=False, choices=(('institution', 'Institution'), ('state', 'State'), ('department', 'Department')), widget=forms.CheckboxSelectMultiple)
+  display_variables = forms.MultipleChoiceField(required=False, choices=(('avg_stipend', 'Stipend'), ('avg_teach_frac', 'Teaching %')), widget=forms.CheckboxSelectMultiple)
+
+  def __init__(self, *args, **kwargs):
+
+    self.helper = FormHelper()
+    self.helper.layout = Layout(
+      Div(
+        Div(
+          Div(
+            Div(
+              Div('grouping_variables', css_class='span3'),
+              Div('display_variables', css_class='span3'),
+              css_class='row-fluid'
+            ),
+            Div(
+              id='table-request-alert',
+              css_class='row-fluid'
+            ),
+            Div(
+              Button('#', 'Get Results', onclick='make_table()', css_class='btn btn-primary'),
+              css_class='row-fluid'
+            ),
+          ),
+          css_class='offset1 span10'
+        ),
+        css_class='row-fluid'
+      )
+      #Div(
+      #  Div(
+      #    css_class='offset1'
+      #  ),
+      #  css_class='row-fluid'
+      #)
+      #Div(
+      #  Div(HTML('<div class="alert">foo</div>'), id='table-request-alert'),
+      #  Button('#', 'Get Results', onclick='make_table()', css_class='btn btn-primary'),
+      #  css_class='row-fluid offset1'
+      #)
+    )
+
+    super(ResultForm, self).__init__(*args, **kwargs)
 
 class SurveyForm(ModelForm):
   
