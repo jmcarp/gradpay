@@ -1,17 +1,56 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+
+<style>
+  
+  .icon-div {
+    text-align: center;
+  }
+  .icon-div i {
+    font-size: 64px;
+  }
+  .icon-div a, a:visited, a:hover {
+    text-decoration: none;
+    color: #0066CC;
+  }
+
+</style>
+
+{% endblock %}
+
 {% block content %}
   
   <div class="page-header">
     <h1>Welcome to GradPay!</h1>
   </div>
 
-  <p>
+  <p class="lead">
     How much do graduate students pay for their degrees? How much do they get paid in stipends--if anything? Which schools and departments provide the best support for students?
+    GradPay is trying to answer these questions and more by asking graduate students about the support they get from their programs.
   </p>
+  
+  <br />
 
-  <p>
-    GradPay is trying to answer these questions and more by asking graduate students about the support they get from their programs. Create an <a href="/accounts/register/">account</a> and fill out the <a href="/survey/">survey</a> today, or check out our <a href="/results/">results</a> so far.
-  </p>
+  <div class="row-fluid">
+    <div class="span4 icon-div">
+      <a href="/survey/">
+        <div><i class="icon-edit"></i></div>
+        <div><h3>Take the survey</h3></div>
+      </a>
+    </div>
+    <div class="span4 icon-div">
+      <a href="/results/">
+        <div><i class="icon-search"></i></div>
+        <div><h3>View the results</h3></div>
+      </a>
+    </div>
+    <div class="span4 icon-div">
+      <a href="/contact/">
+        <div><i class="icon-envelope"></i></div>
+        <div><h3>Contact us</h3></div>
+      </a>
+    </div>
+  </div>
   
 {% endblock %}

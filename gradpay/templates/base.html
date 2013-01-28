@@ -16,6 +16,9 @@
 <link href="{{ STATIC_URL }}css/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome-ie7.css" rel="stylesheet">
+
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 
 {% include "social/align.css" %}
@@ -55,10 +58,10 @@
       <a class="brand" href="/"><img src="{{ STATIC_URL }}img/logo.png" height="30" width="30" /> GradPay</a>
       <div class="nav-collapse">
         <ul class="nav">
-          <li class="{% active request "^/$" %}"><a href="/">Home</a></li>
-          <li class="{% active request "^/survey/$" %}"><a href="/survey/">Survey</a></li>
-          <li class="{% active request "^/results/$" %}" ><a href="/results/">Results</a></li>
-          <li class="{% active request "^/contact/$" %}"><a href="/contact/">Contact</a></li>
+          <li class="{% active request "^/$" %}"><a href="/"><i class="icon-home"></i> Home</a></li>
+          <li class="{% active request "^/survey/$" %}"><a href="/survey/"><i class="icon-edit"></i> Survey</a></li>
+          <li class="{% active request "^/results/$" %}" ><a href="/results/"><i class="icon-search"></i> Results</a></li>
+          <li class="{% active request "^/contact/$" %}"><a href="/contact/"><i class="icon-envelope"></i> Contact</a></li>
         </ul>
         <ul class="nav pull-right">
           {% if user.is_authenticated %}
