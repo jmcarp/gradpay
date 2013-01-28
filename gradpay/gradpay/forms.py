@@ -23,10 +23,21 @@ from crispy_forms.layout import Layout, HTML, Div, Field, Fieldset, ButtonHolder
 
 remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to select more than one.'))
 
+GROUPING_CHOICES = (
+  ('institution', 'Institution'), 
+  ('state', 'State'), 
+  ('department', 'Department')
+)
+
+DISPLAY_CHOICES = (
+  ('avg_stipend', 'Stipend'), 
+  ('avg_teach_frac', 'Teaching %')
+)
+
 class ResultForm(forms.Form):
   
-  grouping_variables = forms.MultipleChoiceField(required=False, choices=(('institution', 'Institution'), ('state', 'State'), ('department', 'Department')), widget=forms.CheckboxSelectMultiple)
-  display_variables = forms.MultipleChoiceField(required=False, choices=(('avg_stipend', 'Stipend'), ('avg_teach_frac', 'Teaching %')), widget=forms.CheckboxSelectMultiple)
+  grouping_variables = forms.MultipleChoiceField(required=False, choices=GROUPING_CHOICES, initial=[choice[0] for choice in GROUPING_CHOICES], widget=forms.CheckboxSelectMultiple)
+  display_variables = forms.MultipleChoiceField(required=False, choices=DISPLAY_CHOICES, initial=[choice[0] for choice in DISPLAY_CHOICES], widget=forms.CheckboxSelectMultiple)
 
   def __init__(self, *args, **kwargs):
 
@@ -48,22 +59,12 @@ class ResultForm(forms.Form):
               Button('#', 'Get Results', onclick='make_table()', css_class='btn btn-primary'),
               css_class='row-fluid'
             ),
+            HTML('<hr>')
           ),
           css_class='offset1 span10'
         ),
         css_class='row-fluid'
       )
-      #Div(
-      #  Div(
-      #    css_class='offset1'
-      #  ),
-      #  css_class='row-fluid'
-      #)
-      #Div(
-      #  Div(HTML('<div class="alert">foo</div>'), id='table-request-alert'),
-      #  Button('#', 'Get Results', onclick='make_table()', css_class='btn btn-primary'),
-      #  css_class='row-fluid offset1'
-      #)
     )
 
     super(ResultForm, self).__init__(*args, **kwargs)
