@@ -130,7 +130,7 @@ class Survey(models.Model):
   international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
 
   # Current year support
-  stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> stipend or salary in US dollars. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
+  stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> pre-tax stipend or salary in US dollars. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
   support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
   summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Do you receive a summer stipend?')
   tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Are your tuition fees covered?')
