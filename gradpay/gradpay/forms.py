@@ -1,5 +1,7 @@
 # Imports
 import datetime
+import hashlib
+import random
 
 # Django imports
 from django import forms
@@ -204,3 +206,12 @@ class SurveyForm(ModelForm):
     
     return department_record
     return self.cleaned_data['department']
+
+  def save(self):
+    
+    instance = super(SurveyForm, self).save(commit=False)
+
+    # Generate random salt
+    salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+    # Generate activation key
+    instance.activation_key = hashlib.sha1(salt + instance.email).hexdigest()
