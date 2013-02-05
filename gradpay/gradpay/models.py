@@ -3,6 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
+import datetime
+from django.utils.timezone import now
+
+import settings
+
 # Form choices
 
 DEGREE_CHOICES = (
@@ -112,14 +117,28 @@ class Support(models.Model):
   def __unicode__(self):
     return self.name
 
+class SurveyManager(models.Manager):
+  
+  def delete_expired_surveys(self):
+    
+    for survey in self.all():
+      if not survey.is_active:
+        delta = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
+        if (survey.time_created + delta) < now():
+          survey.delete()
+
 class Survey(models.Model):
   
-  # User
-  user = models.ForeignKey(User, editable=False)
-
   # Timestamps
   time_modified = models.DateTimeField(auto_now=True)
   time_created = models.DateTimeField(auto_now_add=True)
+  
+  # Activation fields
+  is_active = models.BooleanField(editable=False)
+  activation_key = models.CharField(max_length=40, editable=False)
+  
+  # Email address
+  email = models.EmailField(max_length=70, verbose_name='Email address', help_text='Note: You must use an academic [.edu] email address.')
 
   # Program
   institution = models.ForeignKey(Institution)
@@ -151,6 +170,8 @@ class Survey(models.Model):
   # Summary
   satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')
   comments = models.TextField(blank=True, help_text='Enter any comments about your financial support and benefits here.')
+
+  objects = SurveyManager()
 
   def save(self):
     

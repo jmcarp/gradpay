@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+  {% if status == 'success' %}
+
+    <div class="page-header">
+      <h1>Submission confirmed.</h1>
+    </div>
+    
+    <div>
+      Your survey submission is now complete. You can compare your program to others in the <a href="/results/">results</a> section or <a href="/contact/">contact us</a> with feedback about the survey.
+    </div>
+
+  {% else %}
+
+    <div class="page-header">
+      <h1>Submission not confirmed.</h1>
+    </div>
+
+    <div>
+      No surveys matched your activation key. You may have confirmed your submission already. If you would like to modify your responses, you can <a href="/survey/">take the survey</a> again.
+    </div>
+
+  {% endif %}
+
+{% endblock %}

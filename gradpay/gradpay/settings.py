@@ -1,6 +1,6 @@
 # Django settings for gradpay project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -124,7 +124,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration',
     'selectable',
     'crispy_forms',
     'django.contrib.humanize',
@@ -132,6 +131,7 @@ INSTALLED_APPS = (
     'gunicorn',
     'gradpay',
 )
+    #'registration',
 
 # Time limit for django-registration
 ACCOUNT_ACTIVATION_DAYS = 7

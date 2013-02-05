@@ -12,6 +12,10 @@ from django.http import HttpResponse
 from django.db.models import Avg, Count
 from django.db.models import Q
 
+# Set up hash regex
+import re
+SHA1_RE = re.compile('^[a-f0-9]{40}$')
+
 relation_map = {
   'institution' : 'institution__name',
   'state' : 'institution__state',
@@ -107,7 +111,11 @@ def results_json(request):
   limit = request.GET.get('iDisplayLength', 10)
   limit = min(int(limit), 100)
   
+  # Get surveys
   rows = Survey.objects
+  
+  # Only look at activated responses
+  rows = rows.filter(is_active=True)
 
   # Filter by search term
   if like_lookup:
@@ -115,11 +123,6 @@ def results_json(request):
 
   # Compute average stipend
   rows = rows.values(*units).annotate(**annotate_args)
-  #rows = rows.values(*units).annotate(
-  #  avg_stipend=Avg('stipend'), 
-  #  avg_teach_frac=Avg('_teaching_fraction'), 
-  #  num_resp=Count('stipend')
-  #)
   
   # Order
   rows = rows.order_by(order_by)
@@ -133,7 +136,6 @@ def results_json(request):
   aaData = []
   for row in rows:
     aaData.append([row_extract(row, var) for var in vars if var_name(var) in row])
-    #aaData.append([row[var] for var in vars if var in row])
 
   # Assemble data
   data = {
@@ -164,34 +166,66 @@ def about(request):
 def results(request):
   
   result_form = ResultForm()
-  return render_to_response('results.html', {'skip_fluid' : True, 'form' : result_form}, context_instance=RequestContext(request))
+  return render_to_response(
+    'results.html', 
+    {'skip_fluid' : True, 'form' : result_form}, 
+    context_instance=RequestContext(request)
+  )
 
 def contact(request):
 
   return render_to_response('contact.html', context_instance=RequestContext(request))
 
-#@login_required
-def survey(request):
+def activate(request, key):
   
-  ## Check for previously saved survey
-  #try:
-  #  survey = Survey.objects.filter(user=request.user).get()
-  #except:
-  #  survey = None
+  # Default status is failure
+  status = 'failure'
+  
+  # Skip unless key matches hash pattern
+  if SHA1_RE.search(key):
+
+    try:
+      
+      # Find survey
+      survey = Survey.objects.get(activation_key=key)
+
+      # Delete users w/ same email
+      Survey.objects.\
+        filter(email=survey.email).\
+        exclude(activation_key=key).\
+        delete()
+
+      # Activate target survey
+      survey.is_active = True
+      survey.activation_key = ''
+      survey.save()
+
+      # Success
+      status = 'success'
+    
+    # Couldn't find survey
+    except Survey.DoesNotExist:
+      
+      pass
+
+  # Return response
+  return render_to_response(
+    'activation_complete.html', 
+    {'status' : status},
+    context_instance=RequestContext(request)
+  )
+
+def survey(request):
 
   # Save data or display form
   if request.method == 'POST':
     survey_form = SurveyForm(request.POST)
-    #survey_form = SurveyForm(request.POST, instance=survey)
     if survey_form.is_valid():
-      ## Add user info to survey
-      #survey_form.instance.user = request.user
-      # Save data
       survey_form.save()
       # Redirect
       return render_to_response('survey_complete.html', context_instance=RequestContext(request))
   else:
-    survey_form = SurveyForm(instance=survey)
+    survey_form = SurveyForm()
 
   # Display form
   return render_to_response('survey.html', {'form' : survey_form}, RequestContext(request))

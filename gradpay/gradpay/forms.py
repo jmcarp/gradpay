@@ -2,6 +2,7 @@
 import datetime
 import hashlib
 import random
+import re
 
 # Django imports
 from django import forms
@@ -15,6 +16,11 @@ from models import Department, Institution, Support, Survey
 from lookups import DepartmentLookup, InstitutionLookup
 from widgets import HelpSelectMultiple
 from widgets import FKAutoCompleteWidget
+
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from django.core.mail import send_mail
+import settings
 
 # Selectable imports
 from selectable.forms import AutoCompleteWidget
@@ -92,7 +98,7 @@ class SurveyForm(ModelForm):
       """),
       Fieldset(
         'Program details',
-        'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year'
+        'email', 'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year'
       ),
       Fieldset(
         'Stipend and support: Current academic year',
@@ -180,6 +186,14 @@ class SurveyForm(ModelForm):
 
     # Return cleaned data
     return cleaned_data
+  
+  def clean_email(self):
+    
+    # Email must end in .edu
+    if not re.search('\.edu$', self.cleaned_data['email'], re.I):
+      raise forms.ValidationError(_('Must be a valid academic [.edu] email address.'))
+
+    return self.cleaned_data['email']
 
   def clean_institution(self):
     
@@ -192,7 +206,6 @@ class SurveyForm(ModelForm):
         raise forms.ValidationError(_('Institution must be chosen from suggestions.'))
     
     return institution_record
-    return self.cleaned_data['institution']
 
   def clean_department(self):
     
@@ -205,13 +218,31 @@ class SurveyForm(ModelForm):
         raise forms.ValidationError(_('Department must be chosen from suggestions.'))
     
     return department_record
-    return self.cleaned_data['department']
 
   def save(self):
     
     instance = super(SurveyForm, self).save(commit=False)
-
+    
     # Generate random salt
     salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+
     # Generate activation key
     instance.activation_key = hashlib.sha1(salt + instance.email).hexdigest()
+
+    # Set active to False
+    instance.active = False
+    
+    instance.save()
+
+    # Email user
+    mail_context = {
+      'activation_key' : instance.activation_key,
+      'site' : Site.objects.get_current(),
+    }
+
+    subject = render_to_string('activation_email_subject.txt', mail_context)
+    subject = ''.join(subject.splitlines())
+    message = render_to_string('activation_email.txt', mail_context)
+    
+    # Send email
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.email])
