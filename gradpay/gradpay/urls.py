@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from django.contrib.auth import views as auth_views
-from regform import CustomAuthenticationForm, CustomRegistrationForm
+#from regform import CustomAuthenticationForm, CustomRegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 
 import settings
