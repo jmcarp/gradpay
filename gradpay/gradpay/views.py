@@ -52,7 +52,7 @@ stored_vars = [
   'department__name',
 ]
 computed_vars = [
-  'avg_stipend',
+  ('avg_stipend', fmt_factory(False, 0)),
   ('avg_teach_frac', fmt_factory(True, 0)),
   'num_resp',
 ]
