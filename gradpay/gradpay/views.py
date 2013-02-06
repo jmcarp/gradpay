@@ -197,7 +197,7 @@ def activate(request, key):
 
       # Activate target survey
       survey.is_active = True
-      survey.activation_key = ''
+      survey.activation_key = 'ACTIVATED'
       survey.save()
 
       # Success
