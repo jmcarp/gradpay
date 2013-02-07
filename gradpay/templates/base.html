@@ -63,14 +63,6 @@
           <li class="{% active request "^/results/$" %}" ><a href="/results/"><i class="icon-search"></i> Results</a></li>
           <li class="{% active request "^/contact/$" %}"><a href="/contact/"><i class="icon-envelope"></i> Contact</a></li>
         </ul>
-        <ul class="nav pull-right">
-          {% if user.is_authenticated %}
-            <li><a href="/accounts/logout/"><i class="icon-user icon-black"></i> Sign out</a></li>
-          {% else %}
-            <li class="{% active request "/^accounts/login/$" %}"><a href="/accounts/login/"><i class="icon-user icon-black"></i> Sign in</a></li>
-            <li class="{% active request "/accounts/register$/" %}"><a href="/accounts/register/">Sign up</a></li>
-          {% endif %}
-        </ul>
       </div>
     </div>
   </div>
