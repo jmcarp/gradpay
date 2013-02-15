@@ -2,11 +2,14 @@
     {% include 'bootstrap/layout/help_text.html' %}
 {% endif %}
 
+{% comment %}
 {% if error_text_inline %}
     {% include 'bootstrap/layout/field_errors.html' %}
 {% else %}
     {% include 'bootstrap/layout/field_errors_block.html' %}
 {% endif %}
+{% endcomment %}
+{% include 'bootstrap/layout/field_errors_block.html' %}
 
 {% if not help_text_inline %}
     {% include 'bootstrap/layout/help_text.html' %}

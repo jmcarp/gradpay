@@ -96,9 +96,12 @@ def results_json(request):
     for var in stored_vars[1:]:
       like_lookup = like_lookup | Q(**{var + '__icontains' : like})
 
+  # Get sort variable
   sort_col = request.GET.get('iSortCol_0', '0')
   sort_col = int(sort_col)
   sort_var = vars[sort_col]
+  if isinstance(sort_var, tuple):
+    sort_var = sort_var[0]
 
   # Get sort direction
   sort_dir = request.GET.get('sSortDir_0', 'dsc')

@@ -8,6 +8,7 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
 
   <link href="{{ STATIC_URL }}bootstrap-autocomplete.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}css/scrollspy.css" rel="stylesheet">
 
   <style>
      .ui-autocomplete {
@@ -18,11 +19,24 @@
     } 
     .help-row {
         margin-top: 10px;
-        margin-left: 0px;
+        /*margin-left: 0px;*/
     }
     .control-group {
         padding-bottom: 10px;
+        /* Hack: fix scroll offset */
+        margin-top: -60px;
+        padding-top: 60px;
     }
+    legend + .control-group {
+        /* Hack: fix margin for first input in fieldset */
+        margin-top: -40px;
+    }
+    .anchor {
+        /* Hack: fix scroll offset */
+        margin-top: -60px;
+        padding-top: 60px;
+    }
+
   </style>
 
   <script type="text/javascript">
@@ -70,17 +84,102 @@
       });
       
     });
+    
+  // Affix
+  !function ($) {
+    $(function(){
+      var $window = $(window)
+       // side bar
+       
+      $('.sidenav').affix({
+        offset: {
+          top: function () { return $window.width() <= 980 ? 190 : 110 },
+          bottom: 270
+        }
+      })
+    })
+  }(window.jQuery)
+  
+  $(document).ready(function() {
+    // Circumvent default anchor behavior
+    $('.sidebar li a').click(function(event) {
+      event.preventDefault();
+      $($(this).attr('href'))[0].scrollIntoView();
+    });
+  });
+
+  // Form warnings
+  $(document).ready(function() {
+
+    var alert_close_html = '<button type="button" class="close" data-dismiss="alert">&times;</button>'
+
+    $('#div_id_stipend').focusout(function () {
+      var input = $(this).find('input');
+      var p = $(this).find('p');
+      var value = parseFloat(input.val());
+      var msg;
+      if (value != 0 && value < 10000) {
+        msg = 'This number is very low. Please verify that this is your <strong>YEARLY</strong> stipend. If this number is correct, please close this message and continue with the survey.';
+      } else if (value > 60000) {
+        msg = 'This number is very high. Please verify that this is your <strong>YEARLY</strong> stipend. If this number is correct, please close this message and continue with the survey.';
+      }
+      if (msg) {
+        p.prepend('<div class="alert form-warning">' + alert_close_html + msg + '</div>');
+      }
+    });
+    
+    // Clear warning on focus
+    $('#div_id_stipend').focusin(function() {
+      $(this).find('.alert').remove();
+    });
+    
+    // Can't submit form while warnings remain
+    $('#submit-id-submit').click(function() {
+      var warnings = $('.form-warning')
+      if (warnings.length > 0) {
+        //warnings.parents('.control-group')[0].scrollIntoView();
+        var control_group = warnings.parents('.control-group')
+        $('html, body').animate(
+          {scrollTop: control_group.offset().top}, 
+          {
+            duration: 1000,
+            complete: function() {warnings.effect('shake', {}, 250)}
+          }
+        );
+        return false;
+      }
+    });
+
+  });
+    
   </script>
 
 {% endblock %}
 
 {% block content %}
 
+<div class="container">
+
   <div class="page-header">
     <h1>Graduate Support Survey</h1>
     <p>Take the survey! All responses are confidential and will not be displayed with your account information.</p>
   </div>
 
-  {% crispy form %}
+  <div class="row">
+    <div class="span3 sidebar">
+      <ul class="nav nav-list sidenav">
+        <li><a href="#details"><i class="icon-chevron-right"></i>Details</a></li>
+        <li><a href="#stipend-current"><i class="icon-chevron-right"></i>Stipend: Current</a></li>
+        <li><a href="#stipend-general"><i class="icon-chevron-right"></i>Stipend: General</a></li>
+        <li><a href="#benefits"><i class="icon-chevron-right"></i>Benefits</a></li>
+        <li><a href="#comments"><i class="icon-chevron-right"></i>Comments</a></li>
+      </ul>
+    </div>
+    <div class="span9">
+      {% crispy form %}
+    </div>
+  </div>
+
+</div>
 
 {% endblock %}

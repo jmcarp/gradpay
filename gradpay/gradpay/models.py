@@ -45,6 +45,12 @@ TUITION_CHOICES = (
   ('NS', 'Not sure'),
 )
 
+FEES_CHOICES = (
+  ('YS', 'Yes'),
+  ('NO', 'No'),
+  ('NS', 'Not sure'),
+)
+
 CONTRACT_CHOICES = (
   ('YR', 'Each semester or year'),
   ('CT', 'Once at start of program (for entire program)'),
@@ -61,6 +67,13 @@ PART_TIME_CHOICES = (
 LOAN_CHOICES = (
   ('YS', 'Yes: Have or plan to take loans'),
   ('NO', 'No: Have not and do not plan to take loans'),
+  ('NS', 'Not sure'),
+)
+
+LEAVE_CHOICES = (
+  ('PL', 'Yes: Paid medical/family leave'),
+  ('UL', 'Yes: Unpaid medical/family leave'),
+  ('NO', 'No medical/family leave'),
   ('NS', 'Not sure'),
 )
 
@@ -149,10 +162,11 @@ class Survey(models.Model):
   international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
 
   # Current year support
-  stipend = models.PositiveIntegerField(help_text='Please enter your <strong>annual</strong> pre-tax stipend or salary in US dollars. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
+  stipend = models.PositiveIntegerField(verbose_name='<strong>Yearly</strong> stipend', help_text='Please enter your <strong>yearly</strong> pre-tax stipend or salary in US dollars. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
   support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
   summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Do you receive a summer stipend?')
   tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Are your tuition fees covered?')
+  fees = models.CharField(max_length=16, choices=FEES_CHOICES, help_text='Are you required to pay any fees for your program (course fees, lab fees, etc.)?')
 
   # General support
   total_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to be enrolled in your program.', validators=[MinValueValidator(1)])
@@ -166,6 +180,7 @@ class Survey(models.Model):
   health_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide health benefits?')
   dental_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide dental benefits?')
   vision_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
+  leave = models.CharField(max_length=16, choices=LEAVE_CHOICES, help_text='Are you eligible for family and/or medical leave (e.g., leave for illness, a family member\'s illness, or childbirth?')
 
   # Summary
   satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')

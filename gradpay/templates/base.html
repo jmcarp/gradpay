@@ -43,7 +43,7 @@
 
 </head>
 
-<body>
+<body data-spy="scroll" data-target=".sidebar" data-offset="100">
 
 {% include "social/facebook-sdk.html" %}
 
@@ -70,17 +70,21 @@
 
 {% include "social/social.html" %}
 
+{% comment %}
 {% if not skip_fluid %}
-  <div class="row-fluid">
-    <div class="span10 offset1">
+  <div class="row">
+    <div>
 {% endif %}
+{% endcomment %}
 
 {% block content %}{% endblock %}
 
+{% comment %}
 {% if not skip_fluid %}
     </div>
   </div>
 {% endif %}
+{% endcomment %}
 
 </body>
 

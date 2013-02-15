@@ -96,37 +96,54 @@ class SurveyForm(ModelForm):
           Please choose the best answer for each question.
         </div>
       """),
-      Fieldset(
-        'Program details',
-        'email', 'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year'
+      Div(
+        Fieldset(
+          'Program details',
+          'email', 'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year',
+        ),
+        id='details', css_class='anchor'
       ),
-      Fieldset(
-        'Stipend and support: Current academic year',
-        HTML("""
-          <div class="alert alert-info">
-            If you are a current student, please answer for the <strong>current</strong> year only.
-            <br />
-            If you have already graduated, please answer for the <strong>last</strong> year of your program.
-          </div>
-        """),
-        'stipend', 'support_types', 'summer_stipend', 'tuition_coverage'
+      Div(
+        Fieldset(
+          'Stipend and support: Current academic year',
+          HTML("""
+            <div class="alert alert-info">
+              If you are a current student, please answer for the <strong>current</strong> year only.
+              <br />
+              If you have already graduated, please answer for the <strong>last</strong> year of your program.
+            </div>
+          """),
+          'stipend', 'support_types', 'summer_stipend', 'tuition_coverage', 'fees',
+          id='stipend-now'
+        ),
+        id='stipend-current', css_class='anchor'
       ),
-      Fieldset(
-        'Stipend and support: General',
-        'total_terms', 'teaching_terms', 'contract', 'part_time_work', 'student_loans'
+      Div(
+        Fieldset(
+          'Stipend and support: General',
+          'total_terms', 'teaching_terms', 'contract', 'part_time_work', 'student_loans',
+          id='stipend-general'
+        ),
+        id='stipend-general', css_class='anchor'
       ),
-      Fieldset(
-        'Health benefits',
-        'health_benefits', 'dental_benefits', 'vision_benefits'
+      Div(
+        Fieldset(
+          'Health benefits',
+          'health_benefits', 'dental_benefits', 'vision_benefits', 'leave',
+        ),
+        id='benefits', css_class='anchor'
       ),
-      Fieldset(
-        'General comments',
-        'satisfaction', 'comments'
+      Div(
+        Fieldset(
+          'General comments',
+          'satisfaction', 'comments',
+        ),
+        id='comments', css_class='anchor'
       )
     )
 
     # Widen form fields
-    self.helper.filter(basestring, max_level=1).wrap(Field, css_class='span6')
+    self.helper.filter(basestring, max_level=2).wrap(Field, css_class='span5')
 
     super(SurveyForm, self).__init__(*args, **kwargs)
 
