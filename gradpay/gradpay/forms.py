@@ -121,7 +121,8 @@ class SurveyForm(ModelForm):
       Div(
         Fieldset(
           'Stipend and support: General',
-          'total_terms', 'teaching_terms', 'contract', 'part_time_work', 'student_loans',
+          'total_terms', 'teaching_terms', 'contract', 'part_time_work', 
+          'student_loans', 'union_member',
           id='stipend-general'
         ),
         id='stipend-general', css_class='anchor'

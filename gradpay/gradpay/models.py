@@ -70,6 +70,12 @@ LOAN_CHOICES = (
   ('NS', 'Not sure'),
 )
 
+UNION_CHOICES = (
+  ('YS', 'Yes'),
+  ('NO', 'No'),
+  ('NS', 'Not sure'),
+)
+
 LEAVE_CHOICES = (
   ('PL', 'Yes: Paid medical/family leave'),
   ('UL', 'Yes: Unpaid medical/family leave'),
@@ -175,12 +181,13 @@ class Survey(models.Model):
   contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
   part_time_work = models.CharField(max_length=16, choices=PART_TIME_CHOICES, verbose_name='Part-time work', help_text='Have you or do you plan to work at a part-time job during your graduate program?')
   student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your graduate program?')
+  union_member = models.CharField(max_length=16, choices=UNION_CHOICES, help_text='Are you represented by a union?')
   
   # Benefits
   health_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide health benefits?')
   dental_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide dental benefits?')
   vision_benefits = models.CharField(max_length=16, choices=BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
-  leave = models.CharField(max_length=16, choices=LEAVE_CHOICES, help_text='Are you eligible for family and/or medical leave (e.g., leave for illness, a family member\'s illness, or childbirth?')
+  leave = models.CharField(max_length=16, choices=LEAVE_CHOICES, verbose_name='Family/medical leave', help_text='Are you eligible for family and/or medical leave (e.g., leave for illness, a family member\'s illness, or childbirth)?')
 
   # Summary
   satisfaction = models.CharField(max_length=16, choices=SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')

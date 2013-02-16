@@ -111,7 +111,12 @@
   // Form warnings
   $(document).ready(function() {
 
-    var alert_close_html = '<button type="button" class="close" data-dismiss="alert">&times;</button>'
+    //var alert_close_html = '<button type="button" class="close" data-dismiss="alert">&times;</button>'
+    var alert_close = $(document.createElement('button'));
+    alert_close.addClass('close')
+    alert_close.attr('type', 'button');
+    alert_close.attr('data-dismiss', 'alert');
+    alert_close.html('&times;');
 
     $('#div_id_stipend').focusout(function () {
       var input = $(this).find('input');
@@ -124,7 +129,13 @@
         msg = 'This number is very high. Please verify that this is your <strong>YEARLY</strong> stipend. If this number is correct, please close this message and continue with the survey.';
       }
       if (msg) {
-        p.prepend('<div class="alert form-warning">' + alert_close_html + msg + '</div>');
+        // Create message div
+        var msgdiv = $(document.createElement('div'));
+        msgdiv.addClass('alert form-warning');
+        msgdiv.append(alert_close);
+        msgdiv.append(msg);
+        // Add message to paragraph
+        p.prepend(msgdiv);
       }
     });
     
@@ -137,13 +148,15 @@
     $('#submit-id-submit').click(function() {
       var warnings = $('.form-warning')
       if (warnings.length > 0) {
-        //warnings.parents('.control-group')[0].scrollIntoView();
         var control_group = warnings.parents('.control-group')
         $('html, body').animate(
           {scrollTop: control_group.offset().top}, 
           {
             duration: 1000,
-            complete: function() {warnings.effect('shake', {}, 250)}
+            complete: function() {
+              if (this.nodeName == 'BODY') { return; }
+              warnings.effect('shake', {times: 2}, 250)
+            }
           }
         );
         return false;

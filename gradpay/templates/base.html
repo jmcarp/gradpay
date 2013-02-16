@@ -47,6 +47,7 @@
 
 {% include "social/facebook-sdk.html" %}
 
+<!-- Top nav -->
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -68,23 +69,11 @@
   </div>
 </div>
 
+<!-- Social links -->
 {% include "social/social.html" %}
 
-{% comment %}
-{% if not skip_fluid %}
-  <div class="row">
-    <div>
-{% endif %}
-{% endcomment %}
-
+<!-- Content -->
 {% block content %}{% endblock %}
-
-{% comment %}
-{% if not skip_fluid %}
-    </div>
-  </div>
-{% endif %}
-{% endcomment %}
 
 </body>
 
