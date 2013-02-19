@@ -131,7 +131,7 @@
     /*margin-top: 20px;*/
   }
   .sidenav.affix {
-    top: 0;
+    top: 20px; /*top: 0;*/
   }
 }
 
@@ -232,54 +232,11 @@
     font-size: 18px;
   }
 
-  /* center example sites */
-  .example-sites {
-    margin-left: 0;
-  }
-  .example-sites > li {
-    float: none;
-    display: block;
-    max-width: 280px;
-    margin: 0 auto 18px;
-    text-align: center;
-  }
-  .example-sites .thumbnail > img {
-    max-width: 270px;
-  }
-
   /* Do our best to make tables work in narrow viewports */
   table code {
     white-space: normal;
     word-wrap: break-word;
     word-break: break-all;
-  }
-
-  /* Examples: dropdowns */
-  .example-submenus > .pull-left {
-    float: none;
-    clear: both;
-  }
-  .example-submenus > .pull-left,
-  .example-submenus > .pull-left + .pull-left {
-    margin-left: 0;
-  }
-  .example-submenus p {
-    margin-bottom: 0;
-  }
-  .example-submenus .dropup > .dropdown-menu,
-  .example-submenus .dropdown > .dropdown-menu {
-    margin-bottom: 10px;
-    float: none;
-    max-width: 180px;
-  }
-
-  /* Examples: modal */
-  .modal-example .modal {
-    position: relative;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
   }
 
   /* Tighten up footer */
