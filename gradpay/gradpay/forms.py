@@ -160,7 +160,7 @@ class SurveyForm(ModelForm):
       if field.required != False:
         field.widget.attrs['required'] = 'required'
       if isinstance(field, fields.IntegerField):
-        field.widget.input_type = 'number'
+        field.widget.input_type = 'text'
         field.widget.attrs['pattern'] = '[0-9]*'
       if isinstance(field.widget, SelectMultiple):
         field.widget.attrs['size'] = len(field.choices)
