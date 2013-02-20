@@ -113,7 +113,8 @@ class SurveyForm(ModelForm):
               If you have already graduated, please answer for the <strong>last</strong> year of your program.
             </div>
           """),
-          'stipend', 'support_types', 'summer_stipend', 'tuition_coverage', 'fees',
+          'stipend', 'support_types', 'summer_stipend', 
+          'tuition_coverage', 'tuition_amount', 'fees', 'fees_amount',
           id='stipend-now'
         ),
         id='stipend-current', css_class='anchor'

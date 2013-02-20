@@ -107,6 +107,44 @@
       $($(this).attr('href'))[0].scrollIntoView();
     });
   });
+  
+  // Branching questions
+  var branch_info = [
+    {
+      field_name: 'tuition_amount',
+      trigger_name: 'tuition_coverage',
+      trigger_fun: function() {
+        var branch_field = $('#div_id_tuition_amount');
+        if (jQuery.inArray($(this).val(), ['NO', 'GT', 'PT']) >= 0) {
+          branch_field.show('slow');
+        } else {
+          branch_field.hide('slow');
+        }
+      }
+    },
+    {
+      field_name: 'fees_amount',
+      trigger_name: 'fees',
+      trigger_fun: function() {
+        var branch_field = $('#div_id_fees_amount');
+        if ($.inArray($(this).val(), ['YS']) >= 0) {
+          branch_field.show('slow');
+        } else {
+          branch_field.hide('slow');
+        }
+      }
+    }
+  ]
+
+  $(document).ready(function() {
+    
+    $.each(branch_info, function(index, value) {
+      var trigger_field = $('#id_' + value.trigger_name);
+      trigger_field.change(value.trigger_fun);
+      trigger_field.trigger('change');
+    });
+
+  });
 
   // Form warnings
   $(document).ready(function() {

@@ -172,7 +172,9 @@ class Survey(models.Model):
   support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
   summer_stipend = models.CharField(max_length=16, choices=SUMMER_STIPEND_CHOICES, help_text='Do you receive a summer stipend?')
   tuition_coverage = models.CharField(max_length=16, choices=TUITION_CHOICES, help_text='Are your tuition fees covered?')
+  tuition_amount = models.PositiveIntegerField(help_text='How much do you pay in tuition (not including tuition covered by your program)?', default=0)
   fees = models.CharField(max_length=16, choices=FEES_CHOICES, help_text='Are you required to pay any fees for your program (course fees, lab fees, etc.)?')
+  fees_amount = models.PositiveIntegerField(help_text='How much do you pay in fees (not including fees covered by your program)?', default=0)
 
   # General support
   total_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to be enrolled in your program.', validators=[MinValueValidator(1)])
