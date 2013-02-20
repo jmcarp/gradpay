@@ -181,7 +181,7 @@ class Survey(models.Model):
   teaching_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to work as a teaching assistant or instructor.')
   _teaching_fraction = models.FloatField(blank=False, editable=False)
   contract = models.CharField(max_length=16, choices=CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
-  part_time_work = models.CharField(max_length=16, choices=PART_TIME_CHOICES, verbose_name='Part-time work', help_text='Have you or do you plan to work at a part-time job during your graduate program?')
+  part_time_work = models.CharField(max_length=16, choices=PART_TIME_CHOICES, verbose_name='Part-time work', help_text='Have you or do you plan to work at a part-time job during your graduate program (not including teaching or research assistantships)?')
   student_loans = models.CharField(max_length=16, choices=LOAN_CHOICES, help_text='Have you or do you plan to take out student loans during your graduate program?')
   union_member = models.CharField(max_length=16, choices=UNION_CHOICES, help_text='Are you represented by a union?')
   
