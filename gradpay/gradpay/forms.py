@@ -161,6 +161,7 @@ class SurveyForm(ModelForm):
         field.widget.attrs['required'] = 'required'
       if isinstance(field, fields.IntegerField):
         field.widget.input_type = 'number'
+        field.widget.attrs['pattern'] = '[0-9]*'
       if isinstance(field.widget, SelectMultiple):
         field.widget.attrs['size'] = len(field.choices)
       if hasattr(field, 'min_value') and field.min_value is not None:
