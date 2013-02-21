@@ -160,6 +160,8 @@ class SurveyForm(ModelForm):
       if field.required != False:
         field.widget.attrs['required'] = 'required'
       if isinstance(field, fields.IntegerField):
+        # Only allow [0-9]* for integer fields
+        # Prevent browsers from adding commas
         field.widget.input_type = 'text'
         field.widget.attrs['pattern'] = '[0-9]*'
       if isinstance(field.widget, SelectMultiple):
