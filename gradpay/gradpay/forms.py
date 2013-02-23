@@ -253,7 +253,7 @@ class SurveyForm(ModelForm):
     
     # Save changes
     instance.save()
-    instance.save_m2m()
+    self.save_m2m()
     
     # Send activation email
     activation.send_activation_email(instance)
