@@ -17,10 +17,7 @@ from lookups import DepartmentLookup, InstitutionLookup
 from widgets import HelpSelectMultiple
 from widgets import FKAutoCompleteWidget
 
-from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
-from django.core.mail import send_mail
-import settings
+import activation
 
 # Selectable imports
 from selectable.forms import AutoCompleteWidget
@@ -254,17 +251,8 @@ class SurveyForm(ModelForm):
     # Set active to False
     instance.active = False
     
+    # Save changes
     instance.save()
-
-    # Email user
-    mail_context = {
-      'activation_key' : instance.activation_key,
-      'site' : Site.objects.get_current(),
-    }
-
-    subject = render_to_string('activation_email_subject.txt', mail_context)
-    subject = ''.join(subject.splitlines())
-    message = render_to_string('activation_email.txt', mail_context)
     
-    # Send email
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [instance.email])
+    # Send activation email
+    activation.send_activation_email(instance)

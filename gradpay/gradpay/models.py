@@ -7,6 +7,7 @@ import datetime
 from django.utils.timezone import now
 
 import settings
+import activation
 
 # Form choices
 
@@ -145,6 +146,13 @@ class SurveyManager(models.Manager):
         delta = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         if (survey.time_created + delta) < now():
           survey.delete()
+
+  def send_reminders(self):
+    
+    for survey in self.\
+        filter(is_active=False).\
+        exclude(activation_key='ACTIVATED'):
+      activation.send_activation_email(survey)
 
 class Survey(models.Model):
   
