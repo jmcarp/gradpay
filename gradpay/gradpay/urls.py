@@ -4,7 +4,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 from django.contrib.auth import views as auth_views
-#from regform import CustomAuthenticationForm, CustomRegistrationForm
 from django.contrib.auth.forms import AuthenticationForm
 
 import settings
@@ -22,23 +21,3 @@ urlpatterns = patterns('',
     (r'^selectable/', include('selectable.urls')),
     (r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
 )
-"""
-    url(
-      r'^accounts/register/$', 'registration.views.register',
-      {
-        'form_class': CustomRegistrationForm,
-        'backend': 'registration.backends.default.DefaultBackend'
-      },
-      name='registration_register'
-    ),
-    url(
-      r'^accounts/login/$',
-      'django.contrib.auth.views.login',
-      {
-        'template_name' : 'registration/login.html',
-        'authentication_form' : CustomAuthenticationForm,
-      },
-      name='auth_login'
-    ),
-    url(r'^accounts/', include('registration.backends.default.urls')),
-"""

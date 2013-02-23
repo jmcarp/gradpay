@@ -63,12 +63,6 @@ sort_map = {
   'desc' : '-',
 }
 
-#annotate_map = {
-#  'avg_stipend'    : Avg('stipend'), 
-#  'avg_teach_frac' : Avg('_teaching_fraction'), 
-#  'num_resp'       : Count('stipend'),
-#}
-
 def results_json(request):
   
   # Get sEcho [datatables security param]
@@ -89,7 +83,6 @@ def results_json(request):
   annotate_args = {}
   for dv in display_variables:
     annotate_args[vars[dv].name] = vars[dv].agg
-    #annotate_args[dv] = annotate_map[dv]
   
   columns = grouping_variables + display_variables
 
@@ -132,7 +125,8 @@ def results_json(request):
     rows = rows.filter(like_lookup)
 
   # Compute average stipend
-  rows = rows.values(*[vars[g].name for g in grouping_variables]).annotate(**annotate_args)
+  rows = rows.values(*[vars[g].name for g in grouping_variables]).\
+    annotate(**annotate_args)
   
   # Order
   rows = rows.order_by(*order_by_fields)
@@ -142,7 +136,8 @@ def results_json(request):
 
   # Apply offset and limit
   rows = rows[offset : offset + limit]
-
+  
+  # Get aaData
   aaData = []
   for row in rows:
     aaData.append([vars[col].extract(row) for col in columns if vars[col].name in row])
@@ -209,6 +204,7 @@ def activate(request, key):
       survey.is_active = True
       survey.activation_key = 'ACTIVATED'
       survey.save()
+      survey.save_m2m()
 
       # Success
       status = 'success'
