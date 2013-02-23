@@ -35,8 +35,8 @@ GROUPING_CHOICES = (
 )
 
 DISPLAY_CHOICES = (
-  ('avg_stipend', 'Stipend'), 
-  ('avg_teach_frac', 'Teaching %')
+  ('stipend', 'Stipend'), 
+  ('teaching', 'Teaching %')
 )
 
 class ResultForm(forms.Form):
