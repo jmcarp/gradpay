@@ -54,7 +54,7 @@ function make_table() {
     'bProcessing' : true,
     'bServerSide' : true,
     'aoColumns' : aoColumns,
-    'sAjaxSource' : '/results_json?units=' + grouping_vars.join(',') + '&display=' + display_vars.join(',')
+    'sAjaxSource' : '/results_json?grouping_vars=' + grouping_vars.join(',') + '&display_vars=' + display_vars.join(',')
   });
 
 }
