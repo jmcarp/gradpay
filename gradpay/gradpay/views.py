@@ -204,7 +204,6 @@ def activate(request, key):
       survey.is_active = True
       survey.activation_key = 'ACTIVATED'
       survey.save()
-      survey.save_m2m()
 
       # Success
       status = 'success'
