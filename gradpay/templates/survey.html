@@ -108,6 +108,16 @@
     });
   });
   
+  // Only allow digits in number fields
+  $(document).ready(function() {
+    $('input[reppattern]').change(function() {
+      var jqthis = $(this);
+      var reppattern = jqthis.attr('reppattern');
+      var regex = new RegExp(reppattern, 'g');
+      $(this).val($(this).val().replace(regex, ''));
+    });
+  });
+  
   // Branching questions
   var branch_info = [
     {

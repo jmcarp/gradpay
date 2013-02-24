@@ -161,6 +161,7 @@ class SurveyForm(ModelForm):
         # Prevent browsers from adding commas
         field.widget.input_type = 'text'
         field.widget.attrs['pattern'] = '[0-9]*'
+        field.widget.attrs['reppattern'] = '[^0-9]'
       if isinstance(field.widget, SelectMultiple):
         field.widget.attrs['size'] = len(field.choices)
       if hasattr(field, 'min_value') and field.min_value is not None:
