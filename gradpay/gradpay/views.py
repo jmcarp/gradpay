@@ -91,6 +91,7 @@ def results_json(request):
   like_lookup = ''
   if like:
     visible_stored_vars = [vars[col] for col in columns if vars[col].type == 'stored']
+    like_lookup = Q(**{visible_stored_vars[0].name + '__icontains' : like})
     for var in visible_stored_vars[1:]:
       like_lookup = like_lookup | Q(**{var.name + '__icontains' : like})
   
