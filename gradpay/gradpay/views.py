@@ -1,4 +1,4 @@
-# 
+# Django imports 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -162,7 +162,14 @@ def channel(request):
 
 def home(request):
   
-  return render_to_response('home.html', context_instance=RequestContext(request))
+  # Get data counts
+  context = {
+    'n_resp' : Survey.objects.filter(is_active=True).count(),
+    'n_inst' : Survey.objects.values('institution').annotate(Count('stipend')).count(),
+    'n_dept' : Survey.objects.values('department').annotate(Count('stipend')).count(),
+  }
+
+  return render_to_response('home.html', context, context_instance=RequestContext(request))
 
 def about(request):
   
