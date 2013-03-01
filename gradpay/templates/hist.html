@@ -33,13 +33,14 @@
 
 var data = {{ stipends }};
 
-dohist = function (values, nbins, addtext, mult, offset) {
+dohist = function (values, nbins, addtext, mult, offset, nticks) {
 
   // Get default argument values
   if (typeof(nbins) === 'undefined') nbins = 10;
   if (typeof(addtext) === 'undefined') addtext = true;
   if (typeof(mult) === 'undefined') mult = 1;
   if (typeof(offset) === 'undefined') offset = 0;
+  if (typeof(nticks) === 'undefined') nticks 8;
 
   // Apply multiplier / offset to values
   values = values.map(function (v) {return v * mult + offset});
@@ -59,14 +60,15 @@ dohist = function (values, nbins, addtext, mult, offset) {
   var data = d3.layout.histogram()
     .bins(x.ticks(nbins))
     (values);
-
+  
   var y = d3.scale.linear()
     .domain([0, d3.max(data, function(d) { return d.y; })])
     .range([height, 0]);
 
   var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .ticks(nticks);
 
   var svg = d3.select("#svg-holder").append("svg")
       .attr("class", "chart")
@@ -108,6 +110,12 @@ dohist = function (values, nbins, addtext, mult, offset) {
 
 {% block content %}
   
-  <div id="svg-holder"></div>
+  <div class="container">
+    
+    <h4>Distribution of Stipends</h4>
+    
+    <div id="svg-holder"></div>
+
+  </div>
   
 {% endblock %}
