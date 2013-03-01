@@ -40,7 +40,7 @@ dohist = function (values, nbins, addtext, mult, offset, nticks) {
   if (typeof(addtext) === 'undefined') addtext = true;
   if (typeof(mult) === 'undefined') mult = 1;
   if (typeof(offset) === 'undefined') offset = 0;
-  if (typeof(nticks) === 'undefined') nticks 8;
+  if (typeof(nticks) === 'undefined') nticks = 8;
 
   // Apply multiplier / offset to values
   values = values.map(function (v) {return v * mult + offset});
