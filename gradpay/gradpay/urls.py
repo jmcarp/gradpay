@@ -11,6 +11,7 @@ import settings
 urlpatterns = patterns('',
     url(r'^$', 'gradpay.views.home', name='home'),
     url(r'^about/$', 'gradpay.views.about', name='about'),
+    url(r'^hist/$', 'gradpay.views.hist', name='hist'),
     url(r'^survey/$', 'gradpay.views.survey', name='survey'),
     url(r'^activate/(\w+)/$', 'gradpay.views.activate', name='activate'),
     url(r'^results/$', 'gradpay.views.results', name='results'),

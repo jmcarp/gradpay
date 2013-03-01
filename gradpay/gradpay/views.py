@@ -175,6 +175,18 @@ def about(request):
   
   return render_to_response('about.html', context_instance=RequestContext(request))
 
+def hist(request):
+  
+  stipends = Survey.objects.filter(is_active=True).values('stipend')
+  stipends = [stipend['stipend'] for stipend in stipends]
+  stipends_json = json.dumps(stipends)
+
+  context = {
+    'stipends' : stipends_json,
+  }
+
+  return render_to_response('hist.html', context, context_instance=RequestContext(request))
+
 def results(request):
   
   result_form = ResultForm()
