@@ -175,17 +175,28 @@ def about(request):
   
   return render_to_response('about.html', context_instance=RequestContext(request))
 
-def hist(request):
+def get_stipends(request):
   
+  # Get stipends from database
   stipends = Survey.objects.filter(is_active=True).values('stipend')
   stipends = [stipend['stipend'] for stipend in stipends]
   stipends_json = json.dumps(stipends)
+  
+  # Return JSON
+  return HttpResponse(stipends_json, mimetype='application/json')
 
-  context = {
-    'stipends' : stipends_json,
-  }
+def hist(request):
+  
+  #stipends = Survey.objects.filter(is_active=True).values('stipend')
+  #stipends = [stipend['stipend'] for stipend in stipends]
+  #stipends_json = json.dumps(stipends)
+  #
+  #context = {
+  #  'stipends' : stipends_json,
+  #}
 
-  return render_to_response('hist.html', context, context_instance=RequestContext(request))
+  return render_to_response('hist.html', context_instance=RequestContext(request))
+  #return render_to_response('hist.html', context, context_instance=RequestContext(request))
 
 def results(request):
   
