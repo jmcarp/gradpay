@@ -55,6 +55,15 @@ dohist = function (values, nbins, addtext, mult, offset, nticks) {
   var x = d3.scale.linear()
     .domain([d3.min(values), d3.max(values)])
     .range([0, width]);
+  
+  // Hack: Make sure last tick is evenly spaced.
+  var ticks = x.ticks(nticks);
+  var tickwidth = ticks[1] - ticks[0];
+  var lasttick = ticks[ticks.length-1];
+  if (lasttick < d3.max(values)) {
+    var xmax = lasttick + tickwidth;
+    x.domain([d3.min(values), xmax]);
+  }
 
   // Generate histogram.
   var data = d3.layout.histogram()
