@@ -166,10 +166,11 @@ def channel(request):
 def home(request):
   
   # Get data counts
+  surveys = Survey.objects.fitler(is_active=True)
   context = {
-    'n_resp' : Survey.objects.filter(is_active=True).count(),
-    'n_inst' : Survey.objects.values('institution').annotate(Count('stipend')).count(),
-    'n_dept' : Survey.objects.values('department').annotate(Count('stipend')).count(),
+    'n_resp' : surveys.count(),
+    'n_inst' : surveys.values('institution').annotate(Count('stipend')).count(),
+    'n_dept' : surveys.values('department').annotate(Count('stipend')).count(),
   }
 
   return render_to_response('home.html', context, context_instance=RequestContext(request))
