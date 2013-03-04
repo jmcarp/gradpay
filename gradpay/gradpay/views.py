@@ -166,7 +166,7 @@ def channel(request):
 def home(request):
   
   # Get data counts
-  surveys = Survey.objects.fitler(is_active=True)
+  surveys = Survey.objects.filter(is_active=True)
   context = {
     'n_resp' : surveys.count(),
     'n_inst' : surveys.values('institution').annotate(Count('stipend')).count(),
