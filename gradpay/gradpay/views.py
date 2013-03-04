@@ -128,6 +128,8 @@ def results_json(request):
   # Compute average stipend
   rows = rows.values(*[vars[g].name for g in grouping_variables]).\
     annotate(**annotate_args)
+  print annotate_args
+  print rows
   
   # Order
   rows = rows.order_by(*order_by_fields)
