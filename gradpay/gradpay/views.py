@@ -9,6 +9,7 @@ from forms import ResultForm, SurveyForm
 import json
 from django.http import HttpResponse
 from django.db.models import Avg, Count
+from gradpay.aggregates import Median
 from django.db.models import Q
 
 # Set up hash regex
@@ -53,7 +54,7 @@ vars = {
   'institution' : VarInfo('institution__name', 'stored'),
   'state' : VarInfo('institution__state', 'stored'),
   'department' : VarInfo('department__name', 'stored'),
-  'stipend' : VarInfo('avg_stipend', 'computed', fmt_factory(False, 0), agg=Avg('stipend')),
+  'stipend' : VarInfo('avg_stipend', 'computed', fmt_factory(False, 0), agg=Median('stipend')),
   'teaching' : VarInfo('avg_teach_frac', 'computed', fmt_factory(True, 0), agg=Avg('_teaching_fraction')),
   'num_resp' : VarInfo('num_resp', 'computed', agg=Count('stipend')),
 }
@@ -174,6 +175,10 @@ def home(request):
 def about(request):
   
   return render_to_response('about.html', context_instance=RequestContext(request))
+
+def faq(request):
+  
+  return render_to_response('faq.html', context_instance=RequestContext(request))
 
 def get_stipends(request):
   
