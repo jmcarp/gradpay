@@ -15,11 +15,11 @@
 {% include_jquery_libs %}
 <link href="{{ STATIC_URL }}css/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
 
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome-ie7.css" rel="stylesheet">
 
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 
 {% include "social/align.css" %}
 
@@ -61,10 +61,29 @@
       <a class="brand" href="/"><img src="{{ STATIC_URL }}img/logo.png" height="30" width="30" /> GradPay</a>
       <div class="nav-collapse">
         <ul class="nav">
-          <li class="{% active request "^/$" %}"><a href="/"><i class="icon-home"></i> Home</a></li>
-          <li class="{% active request "^/survey/$" %}"><a href="/survey/"><i class="icon-edit"></i> Survey</a></li>
-          <li class="{% active request "^/results/$" %}" ><a href="/results/"><i class="icon-search"></i> Results</a></li>
-          <li class="{% active request "^/about/$" %}"><a href="/about/"><i class="icon-question-sign"></i> About</a></li>
+          <li class="{% active request "^/$" %}">
+            <a href="/"><i class="icon-home"></i> Home</a>
+          </li>
+          <li class="{% active request "^/survey/$" %}"><a href="/survey/">
+            <i class="icon-edit"></i> Survey</a>
+          </li>
+          <!-- <li class="{% active request "^/results/$" %}" ><a href="/results/"><i class="icon-search"></i> Results</a></li> -->
+          <li class="dropdown {% active request "^/results/" %}">
+            <a 
+                data-target="#" 
+                class="dropdown-toggle" 
+                data-toggle="dropdown" 
+                href="/results/">
+              <i class="icon-search"></i> Results <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/results/table/">Tables</a></li>
+              <li><a href="/results/figure/">Figures</a></li>
+            </ul>
+          </li>
+          <li class="{% active request "^/about/$" %}">
+            <a href="/about/"><i class="icon-question-sign"></i> About</a>
+          </li>
         </ul>
       </div>
     </div>
