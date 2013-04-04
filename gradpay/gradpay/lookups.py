@@ -1,8 +1,11 @@
+# Imports
 import re
 
+# Selectable imports
 from selectable.base import ModelLookup
 from selectable.registry import registry, LookupAlreadyRegistered
 
+# Project imports
 from models import Department, Institution
 
 class FlexModelLookup(ModelLookup):
@@ -11,6 +14,7 @@ class FlexModelLookup(ModelLookup):
 
   def get_query(self, request, term):
     term = reduce(lambda x, y: re.sub(y[0], y[1], x), self.sub_patterns, term)
+    term = self.join_pattern.join(term)
     return super(FlexModelLookup, self).get_query(request, term)
 
 class DepartmentLookup(ModelLookup):
@@ -23,9 +27,9 @@ class InstitutionLookup(FlexModelLookup):
   model = Institution
   search_fields = ('name__iregex',)
   sub_patterns = [
-    ['[\s-]+', '[\s-]+'],
-    [',', ',?'],
+    ['[\s\-,]', ''],
   ]
+  join_pattern = '[\s\-,]*'
 
 for lookup in [DepartmentLookup, InstitutionLookup]:
   try:
