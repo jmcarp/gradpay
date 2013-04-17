@@ -53,6 +53,8 @@ class VarInfo(object):
 vars = {
     'institution' : VarInfo('institution__name', 'stored'),
     'state' : VarInfo('institution__state', 'stored'),
+    'state_code' : VarInfo('institution__state_code', 'stored'),
+    'county_code' : VarInfo('institution__county_code', 'stored'),
     'department' : VarInfo('department__name', 'stored'),
     'stipend' : VarInfo('avg_stipend', 'computed', fmt_factory(False, 0), agg=Median('stipend')),
     'teaching' : VarInfo('avg_teach_frac', 'computed', fmt_factory(True, 0), agg=Avg('_teaching_fraction')),
@@ -64,7 +66,65 @@ sort_map = {
     'desc' : '-',
 }
 
+def choro_json(request):
+    '''Get data for choropleth.
+    
+    (Request) args:
+        iv : Independent variable for grouping data. Should be
+             state_code or county_code
+        dv : Dependent variable for aggregating data. Examples
+             include stipend, teaching, num_resp
+    Returns:
+        HTTPResponse containing JSON data--dictionary mapping
+        state / county FIPS codes to aggregated data
+    
+    '''
+    
+    # Get variables
+    iv = request.GET.get('iv', 'state_code')
+    dv = request.GET.get('dv', 'stipend')
+
+    # Get annotation params
+    annotate_args = {
+        vars[dv].name : vars[dv].agg,
+    }
+
+    # Get surveys
+    rows = Survey.objects
+    
+    # Only look at activated responses
+    rows = rows.filter(is_active=True)
+
+    # Compute aggregate
+    rows = rows.values(vars[iv].name).\
+        annotate(**annotate_args)
+    
+    # Build result dictionary
+    result = {}
+    for row in rows:
+        key = vars[iv].extract(row)
+        val = vars[dv].extract(row)
+        result[key] = val
+    
+    # Serialize data to JSON
+    json_data = json.dumps(result)
+
+    # Return JSON
+    return HttpResponse(json_data, mimetype='application/json')
+
 def results_json(request):
+    '''Get data for DataTable.
+
+    (Request) args:
+        grouping_vars : comma-separated list of grouping variables
+        display_vars : comma-separated list of display variables
+        sSearch : search term
+        ...
+    Returns:
+        HTTPResponse containing JSON data for request in 
+        DataTables-friendly format
+    
+    '''
     
     # Get sEcho [datatables security param]
     sEcho = request.GET.get('sEcho', 0)
@@ -191,12 +251,10 @@ def get_stipends(request):
     # Return JSON
     return HttpResponse(stipends_json, mimetype='application/json')
 
-#def hist(request):
 def results_figure(request):
     
     return render_to_response('hist.html', context_instance=RequestContext(request))
 
-#def results(request):
 def results_table(request):
     
     result_form = ResultForm()
