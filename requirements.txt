@@ -6,6 +6,7 @@ django-registration==0.8
 django-selectable==0.6.2
 gunicorn==0.17.2
 psycopg2==2.4.5
+pygeocoder==1.1.4
 python-dateutil==2.1
 pytz==2012j
 six==1.2.0
