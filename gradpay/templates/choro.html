@@ -46,7 +46,8 @@
                 .attr('d', d3.geo.path());
         });
 
-        q.defer(d3.json, '/choro_json?iv=' + iv + '&dv=' + dv, function(json) {
+        q.defer(d3.json, '/choro_json?iv=' + iv + '&dv=' + dv)
+        .await(function(json) {
             data = json;
             cscale = d3.scale.linear()
                 .domain([0, d3.max(d3.values(data))])
