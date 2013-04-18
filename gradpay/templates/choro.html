@@ -11,59 +11,80 @@
     
     // Initialize variables
     var data, cscale, quantize;
-    
-    function choro(selector, iv, dv) {
-        
-        //// Initialize variables
-        //var data, cscale, quantize;
+    var svg, counties, states;
+    var state_hqr, county_hqr;
 
-        svg = d3.select(selector)
+    $(document).ready(function() {
+        
+        svg = d3.select('body')
             .append('svg:svg');
         
-        if (iv == 'county_code') {
-            counties = svg.append('svg:g')
-                .attr('id', 'counties');
-        }
+        counties = svg.append('svg:g')
+            .attr('id', 'counties');
         
         states = svg.append('svg:g')
             .attr('id', 'states');
-        
-        $.ajaxSetup({'async' : false});
 
+    });
+
+    function choro(selector, iv, dv) {
+        
+        var requests = [];
+
+        requests.push($.getJSON('/choro_json?iv=' + iv + '&dv=' + dv));
+        requests.push(state_hqr || $.getJSON('/static/geo/us-states.json'));
         if (iv == 'county_code') {
-            $.getJSON('/static/geo/us-counties.json', function(json) {
-                counties.selectAll('path')
-                    .data(json.features)
-                    .enter().append('path')
-                    .attr('d', d3.geo.path());
-            });
+            requests.push(county_hqr || $.getJSON('/static/geo/us-counties.json'))
         }
         
-        $.getJSON('/static/geo/us-states.json', function(json) {
+        // Wait for AJAX requests to finish
+        $.when.apply(this, requests).done(function() {
+            
+            // Update globals
+            state_hqr = state_hqr || arguments[1];
+            county_hqr = county_hqr || arguments[2];
+
+            // Draw counties
+            if (iv == 'county_code') {
+                counties.selectAll('path')
+                    .data(arguments[2][0].features)
+                    .enter().append('path')
+                    .attr('d', d3.geo.path());
+                states.selectAll('path')
+                    .style('fill', 'none');
+            }
+            
+            // Draw states
             states.selectAll('path')
-                .data(json.features)
+                .data(arguments[1][0].features)
                 .enter().append('path')
                 .attr('d', d3.geo.path());
-        });
+            if (iv == 'state_code') {
+                states.selectAll('path')
+                    .style('fill', '#000');
+            }
 
-        $.getJSON('/choro_json?iv=' + iv + '&dv=' + dv, function(json) {
-            data = json;
+            // Set up color scale
+            data = arguments[0][0];
             cscale = d3.scale.linear()
                 .domain([0, d3.max(d3.values(data))])
                 .range(['blue', 'red']);
             function quantize(d) {
                 return cscale(data[d.id]);
             }
+
+            // Draw overlay
             if (iv == 'county_code') {
                 counties.selectAll('path')
+                    .transition()
                     .style('fill', quantize);
             } else {
                 states.selectAll('path')
+                    .transition()
                     .style('fill', quantize);
             }
+
         });
-        
-        $.ajaxSetup({'async' : true});
 
     }
 
