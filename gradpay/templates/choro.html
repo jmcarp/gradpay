@@ -4,7 +4,8 @@
 
 <link rel="stylesheet" type="text/css" href="/static/css/choro.css" />
 
-<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
+<script src="http://d3js.org/d3.v2.min.js?"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
 
 <script type="text/javascript">
     
@@ -27,6 +28,42 @@
         states = svg.append('svg:g')
             .attr('id', 'states');
         
+        q = queue();
+
+        if (iv == 'county_code') {
+            q.defer(d3.json, '/static/geo/us-counties.json', function(json) {
+                counties.selectAll('path')
+                    .data(json.features)
+                    .enter().append('path')
+                    .attr('d', d3.geo.path());
+            });
+        }
+        
+        q.defer(d3.json, '/static/geo/us-states.json', function (json) {
+            states.selectAll('path')
+                .data(json.features)
+                .enter().append('path')
+                .attr('d', d3.geo.path());
+        });
+
+        q.defer(d3.json, '/choro_json?iv=' + iv + '&dv=' + dv, function(json) {
+            data = json;
+            cscale = d3.scale.linear()
+                .domain([0, d3.max(d3.values(data))])
+                .range(['blue', 'red']);
+            function quantize(d) {
+                return cscale(data[d.id]);
+            }
+            if (iv == 'county_code') {
+                counties.selectAll('path')
+                    .style('fill', quantize);
+            } else {
+                states.selectAll('path')
+                    .style('fill', quantize);
+            }
+        });
+        
+        /*
         // Plot counties
         if (iv == 'county_code') {
             d3.json('/static/geo/us-counties.json', function(json) {
@@ -48,6 +85,12 @@
         // Add data
         d3.json('/choro_json?iv=' + iv + '&dv=' + dv, function(json) {
             data=json;
+            cscale = d3.scale.linear()
+                .domain([0, d3.max(d3.values(data))])
+                .range(['blue', 'red']);
+            function quantize(d) {
+                return cscale(data[d.id]);
+            }
             if (iv == 'county_code') {
                 counties.selectAll('path')
                     .style('fill', quantize);
@@ -56,15 +99,57 @@
                     .style('fill', quantize);
             }
         });
-        
-        cscale = d3.scale.linear()
+        */
+        /*cscale = d3.scale.linear()
             .domain([0, d3.max(d3.values(data))])
-            .range(['blue', 'red']);
+            .range(['blue', 'red']);*/
 
-        function quantize(d) {
+        /*function quantize(d) {
             return cscale(data[d.id]);
-        }
+        }*/
         
+        function plot(tmp, json) {
+            x = tmp;
+            alert(tmp);
+            alert(json);
+            c = json[0];
+            s = json[1];
+            v = json[2];
+
+            data = json[2];
+
+            cscale = d3.scale.linear()
+                .domain([0, d3.max(d3.values(data))])
+                .range(['blue', 'red']);
+
+            function quantize(d) {
+                return cscale(data[d.id]);
+            }
+
+            svg = d3.select(selector)
+                .append('svg:svg');
+            
+            if (iv == 'county_code') {
+                counties = svg.append('svg:g')
+                    .attr('id', 'counties');
+            }
+            
+            states = svg.append('svg:g')
+                .attr('id', 'states');
+            
+            if (iv == 'counties') {
+                counties.selectAll('path')
+                    .data(c.features)
+                    .enter().append('path')
+                    .attr('d', d3.geo.path());
+            }
+
+            states.selectAll('path')
+                .data(s.features)
+                .enter().append('path')
+                .attr('d', d3.geo.path());
+
+        }
     }
 
     </script>
