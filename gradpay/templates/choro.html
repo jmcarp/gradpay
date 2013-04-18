@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/choro.css" />
+
+<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
+
+<script type="text/javascript">
+    
+    // Initialize variables
+    var data, cscale, quantize;
+
+    function choro(selector, iv, dv) {
+        
+        //// Initialize variables
+        //var data, cscale, quantize;
+
+        svg = d3.select(selector)
+            .append('svg:svg');
+        
+        if (iv == 'county_code') {
+            counties = svg.append('svg:g')
+                .attr('id', 'counties');
+        }
+        
+        states = svg.append('svg:g')
+            .attr('id', 'states');
+        
+        // Plot counties
+        if (iv == 'county_code') {
+            d3.json('/static/geo/us-counties.json', function(json) {
+                counties.selectAll('path')
+                    .data(json.features)
+                    .enter().append('path')
+                    .attr('d', d3.geo.path());
+            });
+        }
+
+        // Plot states
+        d3.json('/static/geo/us-states.json', function(json) {
+            states.selectAll('path')
+                .data(json.features)
+                .enter().append('path')
+                .attr('d', d3.geo.path());
+        });
+
+        // Add data
+        d3.json('/choro_json?iv=' + iv + '&dv=' + dv, function(json) {
+            data=json;
+            if (iv == 'county_code') {
+                counties.selectAll('path')
+                    .style('fill', quantize);
+            } else {
+                states.selectAll('path')
+                    .style('fill', quantize);
+            }
+        });
+        
+        cscale = d3.scale.linear()
+            .domain([0, d3.max(d3.values(data))])
+            .range(['blue', 'red']);
+
+        function quantize(d) {
+            return cscale(data[d.id]);
+        }
+        
+    }
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    
+    <div class="container">
+        
+        <h4>Distribution of Stipends</h4>
+        
+        <div id="svg-holder"></div>
+
+    </div>
+    
+{% endblock %}
