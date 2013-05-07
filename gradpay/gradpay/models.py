@@ -11,6 +11,12 @@ import activation
 
 # Form choices
 
+GENDER_CHOICES = (
+    ('FM', 'Female'),
+    ('ML', 'Male'),
+    ('NS', 'Other'),
+)
+
 DEGREE_CHOICES = (
     ('MR', 'Master\'s (MA, MS, MSW, etc.)'),
     ('DC', 'Doctoral (PhD)'),
@@ -178,6 +184,8 @@ class Survey(models.Model):
     degree = models.ManyToManyField(Degree, help_text='Which degree(s) are you pursuing? Check all that apply.')
     start_year = models.IntegerField(help_text='Year you began your program [yyyy].')
     graduation_year = models.IntegerField(help_text='Year of (expected) graduation [yyyy].')
+    gender = models.CharField(max_length=16, choices=GENDER_CHOICES, blank=True, help_text='Which gender do you identify with?')
+    age = models.PositiveIntegerField(blank=True, help_text='What is your age? Please enter a whole number.')
     international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
 
     # Current year support

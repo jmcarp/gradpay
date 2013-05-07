@@ -16,7 +16,6 @@ from models import Department, Institution, Support, Survey
 from lookups import DepartmentLookup, InstitutionLookup
 from widgets import HelpSelectMultiple
 from widgets import FKAutoCompleteWidget
-
 import activation
 
 # Selectable imports
@@ -96,7 +95,7 @@ class SurveyForm(ModelForm):
       Div(
         Fieldset(
           'Program details',
-          'email', 'institution', 'department', 'degree', 'international_student', 'start_year', 'graduation_year',
+          'email', 'institution', 'department', 'degree', 'start_year', 'graduation_year', 'gender', 'age', 'international_student',
         ),
         id='details', css_class='anchor'
       ),
