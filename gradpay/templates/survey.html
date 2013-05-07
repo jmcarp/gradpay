@@ -4,7 +4,7 @@
 {% block extrahead %}
   
   {{ form.media.css }}
-  {% comment %}{{ form.media.js }}{% endcomment %}
+
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
 
   <link href="{{ STATIC_URL }}bootstrap-autocomplete.css" rel="stylesheet">
@@ -122,7 +122,7 @@
   var branch_info = [
     {
       field_name: 'tuition_amount',
-      trigger_name: 'tuition_coverage',
+      trigger_name: 'id_tuition_coverage',
       trigger_fun: function() {
         var branch_field = $('#div_id_tuition_amount');
         if (jQuery.inArray($(this).val(), ['NO', 'GT', 'PT']) >= 0) {
@@ -134,7 +134,7 @@
     },
     {
       field_name: 'fees_amount',
-      trigger_name: 'fees',
+      trigger_name: 'id_fees',
       trigger_fun: function() {
         var branch_field = $('#div_id_fees_amount');
         if ($.inArray($(this).val(), ['YS']) >= 0) {
@@ -146,12 +146,24 @@
     }
   ]
 
+  function branch_init(params) {
+
+    // Get element to set trigger
+    var trigger_field = $('#' + params.trigger_name);
+
+    // Set onchange function
+    trigger_field.change(params.trigger_fun);
+
+    // Trigger onchange function
+    trigger_field.trigger('change');
+
+  }
+
   $(document).ready(function() {
     
-    $.each(branch_info, function(index, value) {
-      var trigger_field = $('#id_' + value.trigger_name);
-      trigger_field.change(value.trigger_fun);
-      trigger_field.trigger('change');
+    // Initialize triggers based on branch_info
+    $.each(branch_info, function(idx, val) {
+        branch_init(val);
     });
 
   });
@@ -159,12 +171,32 @@
   // Form warnings
   $(document).ready(function() {
 
-    //var alert_close_html = '<button type="button" class="close" data-dismiss="alert">&times;</button>'
     var alert_close = $(document.createElement('button'));
     alert_close.addClass('close')
     alert_close.attr('type', 'button');
     alert_close.attr('data-dismiss', 'alert');
     alert_close.html('&times;');
+
+    $('#div_id_age').focusout(function () {
+      var input = $(this).find('input');
+      var p = $(this).find('p');
+      var value = parseFloat(input.val());
+      var msg;
+      if (value < 18) {
+        msg = 'This number is very low. Please verify that this is your age in years. If this value is correct, please close this message and continue with the survey.';
+      } else if (value > 65) {
+        msg = 'This number is very high. Please verify that this is your age in years. If this value is correct, please close this message and continue with the survey.';
+      }
+      if (msg) {
+        // Create message div
+        var msgdiv = $(document.createElement('div'));
+        msgdiv.addClass('alert form-warning');
+        msgdiv.append(alert_close);
+        msgdiv.append(msg);
+        // Add message to paragraph
+        p.prepend(msgdiv);
+      }
+    });
 
     $('#div_id_stipend').focusout(function () {
       var input = $(this).find('input');
