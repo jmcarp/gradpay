@@ -189,6 +189,9 @@ def results_json(request):
     rows = rows.values(*[vars[g].name for g in grouping_variables]).\
         annotate(**annotate_args)
     
+    # Only show rows with minimum number of responses
+    rows = rows.filter(num_resp__gte=3)
+
     # Order
     rows = rows.order_by(*order_by_fields)
 
