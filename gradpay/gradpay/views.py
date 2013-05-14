@@ -12,8 +12,6 @@ from django.db.models import Avg, Count
 from gradpay.aggregates import Median
 from django.db.models import Q
 
-#import os
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'gradpay.settings'
 from django.conf import settings
 
 # Set up hash regex
