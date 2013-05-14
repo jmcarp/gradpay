@@ -1,6 +1,6 @@
 # Django settings for gradpay project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -131,25 +131,29 @@ INSTALLED_APPS = (
     'gunicorn',
     'gradpay',
 )
-    #'registration',
 
 # Time limit for django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
 DEFAULT_FROM_EMAIL = 'gradpay@heroku.com'
 
+# Email settings
+
 mail_client = 'gmail'
 
 if mail_client == 'sendgrid':
-  EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
-  EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
-  EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
+    EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
+    EMAIL_HOST = 'smtp.sendgrid.net'
 elif mail_client == 'gmail':
-  EMAIL_HOST_USER = os.environ['GMAIL_SMTP_USER']
-  EMAIL_HOST_PASSWORD = os.environ['GMAIL_SMTP_PASSWORD']
-  EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = os.environ['GMAIL_SMTP_USER']
+    EMAIL_HOST_PASSWORD = os.environ['GMAIL_SMTP_PASSWORD']
+    EMAIL_HOST = 'smtp.gmail.com'
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Misc settings
+MIN_TABLE_ROWS = 3
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

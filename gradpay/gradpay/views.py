@@ -12,6 +12,10 @@ from django.db.models import Avg, Count
 from gradpay.aggregates import Median
 from django.db.models import Q
 
+#import os
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'gradpay.settings'
+from django.conf import settings
+
 # Set up hash regex
 import re
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
@@ -190,7 +194,7 @@ def results_json(request):
         annotate(**annotate_args)
     
     # Only show rows with minimum number of responses
-    rows = rows.filter(num_resp__gte=3)
+    rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
     # Order
     rows = rows.order_by(*order_by_fields)
