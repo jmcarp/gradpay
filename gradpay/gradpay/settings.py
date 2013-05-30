@@ -111,7 +111,7 @@ WSGI_APPLICATION = 'gradpay.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, '../templates'),
-    '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
+#    '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
 )
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
@@ -129,15 +129,16 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.admin',
     'gunicorn',
+    'djrill',
     'gradpay',
 )
 
 # Time limit for django-registration
 ACCOUNT_ACTIVATION_DAYS = 7
-DEFAULT_FROM_EMAIL = 'gradpay@heroku.com'
+DEFAULT_FROM_EMAIL = 'gradpay.survey@gmail.com'
 
 # Email settings
-
+"""
 mail_client = 'gmail'
 
 if mail_client == 'sendgrid':
@@ -151,8 +152,20 @@ elif mail_client == 'gmail':
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+"""
+# 
+
+# Get Mandrill API key
+# Note: this environment variable is set automatically
+# on Heroku but must be added to .bash_profile for local 
+# testing
+import os
+MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY')
+EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 
 # Misc settings
+
+# Minimum number of rows to be displayed in data tables
 MIN_TABLE_ROWS = 3
 
 # A sample logging configuration. The only tangible logging
@@ -184,9 +197,11 @@ LOGGING = {
     }
 }
 
+# Heroku-specific database configuration
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
 
+# Import local settings for development
 try:
   from local_settings import *
 except:
