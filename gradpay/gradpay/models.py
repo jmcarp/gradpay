@@ -187,6 +187,12 @@ class Survey(models.Model):
     gender = models.CharField(max_length=16, choices=GENDER_CHOICES, blank=True, help_text='Which gender do you identify with?')
     age = models.PositiveIntegerField(blank=True, help_text='What is your age? Please enter a whole number.')
     international_student = models.CharField(max_length=16, choices=INTERNATIONAL_CHOICES, help_text='Are you an international student?')
+    linkedin = models.CharField(
+        max_length=256, 
+        verbose_name='LinkedIn Profile URL', 
+        help_text='Please enter your LinkedIn ID or the URL of your LinkedIn profile', 
+        blank=True
+    )
 
     # Current year support
     stipend = models.PositiveIntegerField(verbose_name='<strong>Yearly</strong> stipend', help_text='Please enter your <strong>yearly</strong> pre-tax stipend or salary in US dollars, including any summer stipend. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
