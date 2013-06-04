@@ -238,7 +238,7 @@ class SurveyForm(ModelForm):
             return url
         
         # Check LinkedIn URL
-        if not re.search('linkedin\.com/(in|pub)/', re.I):
+        if not re.search('linkedin\.com/(in|pub)/', url, re.I):
             raise forms.ValidationError(_('Invalid LinkedIn URL.'))
 
         # Check for // to assure absolute path
