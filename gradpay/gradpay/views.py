@@ -238,6 +238,10 @@ def home(request):
 
     return render_to_response('home.html', context, context_instance=RequestContext(request))
 
+def linkedinfo(request):
+    
+    return render_to_response('linkedinfo.html', context_instance=RequestContext(request))
+
 def about(request):
     
     return render_to_response('about.html', context_instance=RequestContext(request))
