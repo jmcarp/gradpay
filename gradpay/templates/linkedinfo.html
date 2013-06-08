@@ -9,12 +9,15 @@
 
 <script type="text/javascript">
     function onLinkedInLoad() {
+        console.log('loaded');
         IN.Event.on(IN, 'auth', onLinkedInAuth);
     }
     function onLinkedInAuth() {
+        console.log('authed');
         IN.API.Profile('me')
             .fields('public-profile-url')
             .result(function(result) {
+                console.log('resulted');
                 console.log(result);
             }
         )
