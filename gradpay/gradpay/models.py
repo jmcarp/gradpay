@@ -113,7 +113,9 @@ class Survey(models.Model):
         max_length=256, 
         verbose_name='LinkedIn Profile URL', 
         help_text='''[Optional] Please enter the URL of your LinkedIn public profile.
-            Not sure what your URL is? Click <a href="/linkedinfo/" target="_blank">here</a> for help.''',
+            Not sure what your URL is? Click <a href="/linkedinfo/" target="_blank">here</a> for help.
+            Or click here to detect your public URL automatically:
+            <script type="IN/login" data-onAuth="onAuth"></script>''',
         blank=True
     )
 

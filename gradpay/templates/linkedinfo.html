@@ -1,32 +1,9 @@
 {% extends "base.html" %}
 
-{% block extrahead %}
-
-<script type="text/javascript" src="http://platform.linkedin.com/in.js">/*
-    api_key: ad3ikf73o1uc
-    authorize: true
-*/</script>
-
-<script type="text/javascript">
-    function onAuth() {
-        IN.API.Profile('me')
-            .fields('public-profile-url')
-            .result(function(result) {
-                $('#linkedinfo').val(
-                    result.values[0].publicProfileUrl
-                );
-            }
-        )
-    }
-</script>
-
-{% endblock %}
-
 {% block content %}
     
     <div class="container">
-        <input id="linkedinfo" type="text" />
-        <script type="IN/login" data-onAuth="onAuth"></script>
+        
         <div class="page-header">
             <h2>How to find your LinkedIn public profile URL</h2>
         </div>

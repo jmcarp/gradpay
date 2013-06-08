@@ -3,14 +3,32 @@
 
 {% block extrahead %}
   
-  {{ form.media.css }}
+    {{ form.media.css }}
 
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+    <script type="text/javascript" src="http://platform.linkedin.com/in.js">/*
+        api_key: ad3ikf73o1uc
+        authorize: true
+    */</script>
 
-  <link href="{{ STATIC_URL }}bootstrap-autocomplete.css" rel="stylesheet">
-  <link href="{{ STATIC_URL }}css/scrollspy.css" rel="stylesheet">
+    <script type="text/javascript">
+        function onAuth() {
+            IN.API.Profile('me')
+                .fields('public-profile-url')
+                .result(function(result) {
+                    $('#id_linkedin').val(
+                        result.values[0].publicProfileUrl
+                    );
+                }
+            )
+        }
+    </script>
 
-  <style>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.dj.selectable.js"></script>
+
+    <link href="{{ STATIC_URL }}bootstrap-autocomplete.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/scrollspy.css" rel="stylesheet">
+
+    <style>
      .ui-autocomplete {
         /* Limit vertical scrollbar */
         max-height: 100px;
