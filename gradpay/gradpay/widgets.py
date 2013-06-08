@@ -21,7 +21,7 @@ class FKAutoCompleteWidget(AutoCompleteWidget):
                 model_value = self.lookup_class.model.objects.get(pk=value)
             except:
                 model_value = value
-          final_attrs['value'] = force_unicode(self._format_value(model_value))
+            final_attrs['value'] = force_unicode(self._format_value(model_value))
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
 class HelpSelectMultiple(SelectMultiple):
