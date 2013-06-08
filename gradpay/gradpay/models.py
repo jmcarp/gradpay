@@ -112,10 +112,13 @@ class Survey(models.Model):
     linkedin = models.CharField(
         max_length=256, 
         verbose_name='LinkedIn Profile URL', 
-        help_text='''<p>[Optional] Please enter the URL of your LinkedIn public profile.</p>
-            <p>Not sure what your URL is? Click <a href="/linkedinfo/" target="_blank">here</a> for help.</p>
-            <p id="linkedin_helper">Or click here to detect your public URL automatically:</p>
-            <p><script type="IN/login" data-onAuth="onAuth"></script></p>''',
+        help_text='''
+            [Optional] Please enter the URL of your LinkedIn public profile.
+            Not sure what your URL is? Click <a href="/linkedinfo/" target="_blank">here</a> for help.
+            <span id="linkedin_helper">Or click here to detect your public URL automatically:</span>
+            <br />
+            <script type="IN/login" data-onAuth="onAuth"></script>
+        ''',
         blank=True
     )
 
