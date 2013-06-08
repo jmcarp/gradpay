@@ -8,17 +8,13 @@
 */</script>
 
 <script type="text/javascript">
-    function onLinkedInLoad() {
-        console.log('loaded');
-        IN.Event.on(IN, 'auth', onLinkedInAuth);
-    }
     function onAuth() {
-        console.log('authed');
         IN.API.Profile('me')
             .fields('public-profile-url')
             .result(function(result) {
-                console.log('resulted');
-                console.log(result);
+                $('#linkedinfo').value(
+                    result.values[0].publicProfileUrl
+                );
             }
         )
     }
@@ -29,6 +25,7 @@
 {% block content %}
     
     <div class="container">
+        <input id="linkedinfo" type="text" />
         <script type="IN/login" data-onAuth="onAuth"></script>
         <div class="page-header">
             <h2>How to find your LinkedIn public profile URL</h2>
