@@ -12,7 +12,7 @@
         IN.API.Profile('me')
             .fields('public-profile-url')
             .result(function(result) {
-                $('#linkedinfo').value(
+                $('#linkedinfo').val(
                     result.values[0].publicProfileUrl
                 );
             }
