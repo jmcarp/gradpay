@@ -14,9 +14,11 @@
             IN.API.Profile('me')
                 .fields('public-profile-url')
                 .result(function(result) {
-                    $('#id_linkedin').val(
-                        result.values[0].publicProfileUrl
-                    );
+                    var url = result.values[0].publicProfileUrl;
+                    if (url) {
+                        $('#id_linkedin').val(url);
+                        $('#linkedin_helper').hide();
+                    }
                 }
             )
         }
