@@ -106,7 +106,7 @@ def choro_json(request):
     rows = rows.filter(is_active=True)
 
     # Only show rows with minimum number of responses
-    rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
+    rows = rows.filter(num_resp__gte=settings.MIN_CHORO_ROWS)
 
     # Compute aggregate
     rows = rows.values(vars[iv].name).\
