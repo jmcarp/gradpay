@@ -4,7 +4,11 @@ from django.template import RequestContext
 
 # Import models
 from models import Survey
-from forms import ResultForm, SurveyForm
+from models import Degree
+
+# Import forms
+from forms import ResultForm
+from forms import SurveyForm
 
 import json
 from django.http import HttpResponse
