@@ -66,8 +66,9 @@
 
             // Set up color scale
             data = arguments[0][0];
+            values = d3.values(data);
             cscale = d3.scale.linear()
-                .domain([0, d3.max(d3.values(data))])
+                .domain([d3.min(vales), d3.max(values)])
                 .range(['blue', 'red']);
             function quantize(d) {
                 return cscale(data[d.id]);
