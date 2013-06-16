@@ -62,9 +62,23 @@ vars = {
     'state_code' : VarInfo('institution__state_code', 'stored'),
     'county_code' : VarInfo('institution__county_code', 'stored'),
     'department' : VarInfo('department__name', 'stored'),
-    'stipend' : VarInfo('avg_stipend', 'computed', fmt_factory(False, 0), agg=Median('stipend')),
-    'teaching' : VarInfo('avg_teach_frac', 'computed', fmt_factory(True, 0), agg=Avg('_teaching_fraction')),
-    'num_resp' : VarInfo('num_resp', 'computed', agg=Count('stipend')),
+    'stipend' : VarInfo(
+        'avg_stipend', 
+        'computed', 
+        fmt_factory(False, 0), 
+        agg=Median('stipend')
+    ),
+    'teaching' : VarInfo(
+        'avg_teach_frac', 
+        'computed', 
+        fmt_factory(True, 0), 
+        agg=Avg('_teaching_fraction')
+    ),
+    'num_resp' : VarInfo(
+        'num_resp', 
+        'computed', 
+        agg=Count('stipend')
+    ),
 }
 
 sort_map = {
@@ -109,13 +123,14 @@ def choro_json(request):
     # Only look at activated responses
     rows = rows.filter(is_active=True)
 
+    # Compute aggregate
+    rows = rows\
+        .values(vars[iv].name)\
+        .annotate(**annotate_args)
+    
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_CHORO_ROWS)
 
-    # Compute aggregate
-    rows = rows.values(vars[iv].name).\
-        annotate(**annotate_args)
-    
     # Build result dictionary
     result = {}
     for row in rows:
@@ -209,8 +224,9 @@ def results_json(request):
         rows = rows.filter(like_lookup)
 
     # Compute average stipend
-    rows = rows.values(*[vars[g].name for g in grouping_variables]).\
-        annotate(**annotate_args)
+    rows = rows\
+        .values(*[vars[g].name for g in grouping_variables])\
+        .annotate(**annotate_args)
     
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
