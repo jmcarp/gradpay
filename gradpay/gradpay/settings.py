@@ -166,7 +166,8 @@ EMAIL_BACKEND = 'djrill.mail.backends.djrill.DjrillBackend'
 # Misc settings
 
 # Minimum number of rows to be displayed in data tables
-MIN_TABLE_ROWS = 3
+MIN_TABLE_ROWS = 5
+MIN_CHORO_ROWS = 5
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
