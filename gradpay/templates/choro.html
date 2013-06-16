@@ -6,90 +6,17 @@
 
 <script src="http://d3js.org/d3.v2.min.js?"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="{{ STATIC_URL }}/js/choro.js"></script>
 
 <script type="text/javascript">
     
-    // Initialize variables
-    var data, cscale, quantize;
-    var svg, counties, states;
-    var state_hqr, county_hqr;
-
+    // Draw state stipend choropleth on ready
     $(document).ready(function() {
-        
-        svg = d3.select('body')
-            .append('svg:svg');
-        
-        counties = svg.append('svg:g')
-            .attr('id', 'counties');
-        
-        states = svg.append('svg:g')
-            .attr('id', 'states');
-
+        choro.init();
+        choro.choro('', 'state', 'stipend');
     });
 
-    function choro(selector, iv, dv) {
-        
-        var requests = [];
-
-        requests.push($.getJSON('/choro_json?iv=' + iv + '&dv=' + dv));
-        requests.push(state_hqr || $.getJSON('/static/geo/us-states.json'));
-        if (iv == 'county_code') {
-            requests.push(county_hqr || $.getJSON('/static/geo/us-counties.json'))
-        }
-        
-        // Wait for AJAX requests to finish
-        $.when.apply(this, requests).done(function() {
-            
-            // Update globals
-            state_hqr = state_hqr || arguments[1];
-            county_hqr = county_hqr || arguments[2];
-
-            // Draw counties
-            if (iv == 'county_code') {
-                counties.selectAll('path')
-                    .data(arguments[2][0].features)
-                    .enter().append('path')
-                    .attr('d', d3.geo.path());
-                states.selectAll('path')
-                    .style('fill', 'none');
-            }
-            
-            // Draw states
-            states.selectAll('path')
-                .data(arguments[1][0].features)
-                .enter().append('path')
-                .attr('d', d3.geo.path());
-            if (iv == 'state_code') {
-                states.selectAll('path')
-                    .style('fill', '#000');
-            }
-
-            // Set up color scale
-            data = arguments[0][0];
-            values = d3.values(data);
-            cscale = d3.scale.linear()
-                .domain([d3.min(values), d3.max(values)])
-                .range(['blue', 'red']);
-            function quantize(d) {
-                return cscale(data[d.id]);
-            }
-
-            // Draw overlay
-            if (iv == 'county_code') {
-                counties.selectAll('path')
-                    .transition()
-                    .style('fill', quantize);
-            } else {
-                states.selectAll('path')
-                    .transition()
-                    .style('fill', quantize);
-            }
-
-        });
-
-    }
-
-    </script>
+</script>
 
 {% endblock %}
 
@@ -97,6 +24,15 @@
     
     <div class="container">
         
+        <br />
+
+        <div>
+            
+            <input type="button" class="btn btn-primary" value="Stipends by State" onclick="choro.choro('', 'state', 'stipend');" />
+            <input type="button" class="btn btn-primary" value="Stipends by County" onclick="choro.choro('', 'county', 'stipend');" />
+                       
+        </div>
+
         <h4>Distribution of Stipends</h4>
         
         <div id="svg-holder"></div>
