@@ -68,7 +68,7 @@
             data = arguments[0][0];
             values = d3.values(data);
             cscale = d3.scale.linear()
-                .domain([d3.min(vales), d3.max(values)])
+                .domain([d3.min(values), d3.max(values)])
                 .range(['blue', 'red']);
             function quantize(d) {
                 return cscale(data[d.id]);
