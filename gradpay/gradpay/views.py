@@ -90,12 +90,23 @@ def choro_json(request):
     annotate_args = {
         vars[dv].name : vars[dv].agg,
     }
+    if 'num_resp' not in annotate_args:
+        annotate_args['num_resp'] = vars['num_resp'].agg
 
     # Get surveys
     rows = Survey.objects
     
+    # Only look at PhD students
+    # TODO: Filter by degree type
+    degrees = Degree.objects
+    phd_degree = degrees.filter(name__contains='PhD').get()
+    rows = rows.filter(degree__in=[phd_degree])
+
     # Only look at activated responses
     rows = rows.filter(is_active=True)
+
+    # Only show rows with minimum number of responses
+    rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
     # Compute aggregate
     rows = rows.values(vars[iv].name).\
@@ -115,7 +126,7 @@ def choro_json(request):
     return HttpResponse(json_data, mimetype='application/json')
 
 def results_json(request):
-    '''Get data for DataTable.
+    """Get JSON-formatted data for DataTable.
 
     (Request) args:
         grouping_vars : comma-separated list of grouping variables
@@ -126,7 +137,7 @@ def results_json(request):
         HTTPResponse containing JSON data for request in 
         DataTables-friendly format
     
-    '''
+    """
     
     # Get sEcho [datatables security param]
     sEcho = request.GET.get('sEcho', 0)
@@ -180,6 +191,12 @@ def results_json(request):
     # Get surveys
     rows = Survey.objects
     
+    # Only look at PhD students
+    # TODO: Filter by degree type
+    degrees = Degree.objects
+    phd_degree = degrees.filter(name__contains='PhD').get()
+    rows = rows.filter(degree__in=[phd_degree])
+
     # Only look at activated responses
     rows = rows.filter(is_active=True)
 
