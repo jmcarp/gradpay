@@ -59,8 +59,8 @@ class VarInfo(object):
 vars = {
     'institution' : VarInfo('institution__name', 'stored'),
     'state' : VarInfo('institution__state', 'stored'),
-    'state_code' : VarInfo('institution__state_code', 'stored'),
-    'county_code' : VarInfo('institution__county_code', 'stored'),
+    'state' : VarInfo('institution__state_code', 'stored'),
+    'county' : VarInfo('institution__county_code', 'stored'),
     'department' : VarInfo('department__name', 'stored'),
     'stipend' : VarInfo(
         'avg_stipend', 
@@ -91,7 +91,7 @@ def choro_json(request):
     
     (Request) args:
         iv : Independent variable for grouping data. Should be
-             state_code or county_code
+             'state' or 'county'
         dv : Dependent variable for aggregating data. Examples
              include stipend, teaching, num_resp
     Returns:
@@ -101,7 +101,7 @@ def choro_json(request):
     '''
     
     # Get variables
-    iv = request.GET.get('iv', 'state_code')
+    iv = request.GET.get('iv', 'state')
     dv = request.GET.get('dv', 'stipend')
 
     # Get annotation params
@@ -310,7 +310,10 @@ def results_table(request):
     result_form = ResultForm()
     return render_to_response(
         'results.html', 
-        {'skip_fluid' : True, 'form' : result_form}, 
+        {
+            'skip_fluid' : True, 
+            'form' : result_form
+        }, 
         context_instance=RequestContext(request)
     )
 
