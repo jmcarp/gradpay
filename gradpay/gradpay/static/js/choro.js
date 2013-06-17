@@ -46,7 +46,7 @@ var choro = (function() {
         var deferred = [];
         
         // Start request for overlay data
-        deferred.push($.getJSON('/choro_json?iv=' + iv + '&dv=' + dv));
+        deferred.push($.getJSON('/choro_json?iv=' + iv + '_code&dv=' + dv));
         
         // Start request for state choropleth data
         deferred.push(state_info || $.getJSON('/static/geo/us-states.json'));

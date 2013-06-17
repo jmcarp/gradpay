@@ -59,8 +59,8 @@ class VarInfo(object):
 vars = {
     'institution' : VarInfo('institution__name', 'stored'),
     'state' : VarInfo('institution__state', 'stored'),
-    'state' : VarInfo('institution__state_code', 'stored'),
-    'county' : VarInfo('institution__county_code', 'stored'),
+    'state_code' : VarInfo('institution__state_code', 'stored'),
+    'county_code' : VarInfo('institution__county_code', 'stored'),
     'department' : VarInfo('department__name', 'stored'),
     'stipend' : VarInfo(
         'avg_stipend', 
