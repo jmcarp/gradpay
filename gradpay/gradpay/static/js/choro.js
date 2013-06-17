@@ -66,7 +66,7 @@ var choro = (function() {
             // Draw counties
             if (iv == 'county') {
                 counties.selectAll('path')
-                    .data(arguments[2][0].features)
+                    .data(county_info[0].features)
                     .enter().append('path')
                     .attr('d', d3.geo.path());
                 states.selectAll('path')
@@ -75,7 +75,7 @@ var choro = (function() {
             
             // Draw states
             states.selectAll('path')
-                .data(arguments[1][0].features)
+                .data(state_info[0].features)
                 .enter().append('path')
                 .attr('d', d3.geo.path());
             if (iv == 'state_code') {
