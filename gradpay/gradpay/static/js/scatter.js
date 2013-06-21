@@ -7,7 +7,9 @@ var scatter = (function() {
 
     // Initialize SVG variables
     var svg, points, tip;
-    var height, width, padding;
+    var height = 500,
+        width = 500, 
+        padding = 30;
     
     /* 
      * 
@@ -16,12 +18,15 @@ var scatter = (function() {
         
         // Create SVG object
         svg = d3.select('body')
-            .append('svg:svg');
+            .append('svg:svg')
+            .attr('width', width)
+            .attr('height', height);
         
         // Create counties group
         points = svg.append('svg:g')
             .attr('id', 'points');
-
+        
+        // Create tooltip
         tip = d3.select("body").append("div")   
             .attr("class", "tooltip")               
             .style("opacity", 0);        
@@ -69,7 +74,7 @@ var scatter = (function() {
                 .orient('left')
                 .ticks(5);
 
-            points.selectAll('circle')
+            svg.selectAll('circle')
                 .data(data)
                 .enter()
                 .append('circle')
