@@ -33,21 +33,31 @@ var scatter = (function() {
     function scatter(selector, xv, yv) {
         
         // Initialize
-        var data, values, cscale;
+        var data, values;
 
         // 
         $.getJSON(
             '/scatter_json?xv=' + xv + '&yv=' + yv
         ).done(function(data) {
+            var xmin = d3.min(data, function(d) {return d[xv]}),
+                xmax = d3.max(data, function(d) {return d[xv]}),
+                ymin = d3.min(data, function(d) {return d[yv]}),
+                ymax = d3.max(data, function(d) {return d[yv]});
+            var xscale = d3.scale.linear
+                .domain([xmin, xmax])
+                .range([0, 100]);
+            var yscale = d3.scale.linear
+                .domain([0, 100])
+                .range([ymin, ymax]);
             points.selectAll('path')
                 .data(data)
                 .enter()
                 .append('circle')
                 .attr('cx', function(d) {
-                    return d[xv]
+                    return xscale(d[xv]);
                 })
                 .attr('cy', function(d) {
-                    return d[yv]
+                    return yscale(d[yv]);
                 })
                 .attr('r', 5);
 
