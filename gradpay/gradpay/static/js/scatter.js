@@ -68,7 +68,7 @@ var scatter = (function() {
                     tip.transition()        
                         .duration(200)      
                         .style("opacity", .9);      
-                    tip.html(formatTime(d.date) + "<br />"  + d.close)  
+                    tip.html(d.institution)
                         .style("left", (d3.event.pageX) + "px")     
                         .style("top", (d3.event.pageY - 28) + "px");    
                     })                  
