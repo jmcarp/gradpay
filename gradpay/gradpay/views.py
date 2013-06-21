@@ -131,7 +131,7 @@ def scatter_json(request):
     for row in rows:
         results = {column : vars[column].extract(row)
             for column in columns
-            if vars[col].name in row}
+            if vars[column].name in row}
         results.append(result)
 
     # Serialize data to JSON
