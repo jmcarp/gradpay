@@ -47,8 +47,8 @@ var scatter = (function() {
                 .domain([xmin, xmax])
                 .range([0, 100]);
             var yscale = d3.scale.linear()
-                .domain([0, 100])
-                .range([ymin, ymax]);
+                .domain([ymin, ymax])
+                .range([0, 100]);
             points.selectAll('path')
                 .data(data)
                 .enter()
