@@ -7,6 +7,7 @@ var scatter = (function() {
 
     // Initialize SVG variables
     var svg, points, tip;
+    var height, width, padding;
     
     /* 
      * 
@@ -95,7 +96,7 @@ var scatter = (function() {
 
             svg.append("g")
                 .attr("class", "axis")
-                .attr("transform", "translate(0," + (h - padding) + ")")
+                .attr("transform", "translate(0," + (height - padding) + ")")
                 .call(xaxis);
             svg.append("g")
                 .attr("class", "axis")
