@@ -355,6 +355,10 @@ def results_figure(request):
     
     return render_to_response('hist.html', context_instance=RequestContext(request))
 
+def results_scatter(request):
+
+    return render_to_response('scatter.html', context_instance=RequestContext(request))
+
 def results_choro(request):
 
     return render_to_response('choro.html', context_instance=RequestContext(request))
