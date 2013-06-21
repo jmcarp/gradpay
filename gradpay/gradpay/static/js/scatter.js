@@ -6,7 +6,7 @@
 var scatter = (function() {
 
     // Initialize SVG variables
-    var svg, points;
+    var svg, points, tip;
     
     /* 
      * 
@@ -20,7 +20,11 @@ var scatter = (function() {
         // Create counties group
         points = svg.append('svg:g')
             .attr('id', 'points');
-        
+
+        tip = d3.select("body").append("div")   
+            .attr("class", "tooltip")               
+            .style("opacity", 0);        
+
     }
 
     /* 
@@ -45,10 +49,10 @@ var scatter = (function() {
                 ymax = d3.max(data, function(d) {return d[yv]});
             var xscale = d3.scale.linear()
                 .domain([xmin, xmax])
-                .range([0, 100]);
+                .range([50, 250]);
             var yscale = d3.scale.linear()
                 .domain([ymin, ymax])
-                .range([0, 100]);
+                .range([50, 250]);
             points.selectAll('path')
                 .data(data)
                 .enter()
@@ -60,6 +64,19 @@ var scatter = (function() {
                     return yscale(d[yv]);
                 })
                 .attr('r', 5);
+                .on("mouseover", function(d) {      
+                    tip.transition()        
+                        .duration(200)      
+                        .style("opacity", .9);      
+                    tip.html(formatTime(d.date) + "<br />"  + d.close)  
+                        .style("left", (d3.event.pageX) + "px")     
+                        .style("top", (d3.event.pageY - 28) + "px");    
+                    })                  
+                .on("mouseout", function(d) {       
+                    tip.transition()        
+                        .duration(500)      
+                        .style("opacity", 0);   
+                });
 
         });
         
