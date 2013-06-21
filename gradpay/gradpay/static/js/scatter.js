@@ -63,7 +63,7 @@ var scatter = (function() {
                 .attr('cy', function(d) {
                     return yscale(d[yv]);
                 })
-                .attr('r', 5);
+                .attr('r', 5)
                 .on("mouseover", function(d) {      
                     tip.transition()        
                         .duration(200)      
