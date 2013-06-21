@@ -86,6 +86,57 @@ sort_map = {
     'desc' : '-',
 }
 
+def scatter_json(request):
+    """
+    """
+    # Get variables
+    xv = request.GET.get('xv')
+    yv = request.GET.get('yv')
+    grouping_variables = request.GET.get('grouping_vars', 'institution')
+    grouping_variables = grouping_variables.split(',')
+
+    # Get annotation arguments
+    annotate_args = {
+        vars[xv].name : vars[xv].agg,
+        vars[yv].name : vars[yv].agg,
+    }
+    if 'num_resp' not in annotate_args:
+        annotate_args['num_resp'] = vars['num_resp'].agg
+
+    # Get surveys
+    rows = Survey.objects
+    
+    # Only look at PhD students
+    # TODO: Filter by degree type
+    degrees = Degree.objects
+    phd_degree = degrees.filter(name__contains='PhD').get()
+    rows = rows.filter(degree__in=[phd_degree])
+
+    # Only look at activated responses
+    rows = rows.filter(is_active=True)
+
+    # Compute average stipend
+    rows = rows\
+        .values(*[vars[g].name for g in grouping_variables])\
+        .annotate(**annotate_args)
+    
+    # Only show rows with minimum number of responses
+    rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
+
+    # Get aaData
+    results = []
+    for row in rows:
+        results = {column : vars[column].extract(row)
+            for column in columns
+            if vars[col].name in row}
+        results.append(result)
+
+    # Serialize data to JSON
+    json_data = json.dumps(results)
+
+    # Return JSON
+    return HttpResponse(json_data, mimetype='application/json')
+    
 def choro_json(request):
     '''Get data for choropleth.
     
