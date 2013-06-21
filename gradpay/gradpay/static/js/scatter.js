@@ -43,17 +43,32 @@ var scatter = (function() {
         $.getJSON(
             '/scatter_json?xv=' + xv + '&yv=' + yv
         ).done(function(data) {
+
+            // Get min / max values
             var xmin = d3.min(data, function(d) {return d[xv]}),
                 xmax = d3.max(data, function(d) {return d[xv]}),
                 ymin = d3.min(data, function(d) {return d[yv]}),
                 ymax = d3.max(data, function(d) {return d[yv]});
+
+            // Define scales
             var xscale = d3.scale.linear()
                 .domain([xmin, xmax])
                 .range([50, 250]);
             var yscale = d3.scale.linear()
                 .domain([ymin, ymax])
                 .range([50, 250]);
-            points.selectAll('path')
+            
+            // Define axes
+            var xaxis = d3.svg.axis()
+                .scale(xscale)
+                .orient('bottom')
+                .ticks(5);
+            var yaxis = d3.svg.axis()
+                .scale(yscale)
+                .orient('left')
+                .ticks(5);
+
+            points.selectAll('circle')
                 .data(data)
                 .enter()
                 .append('circle')
@@ -64,7 +79,7 @@ var scatter = (function() {
                     return yscale(d[yv]);
                 })
                 .attr('r', 5)
-                .on("mouseover", function(d) {      
+                .on('mouseover', function(d) {      
                     tip.transition()        
                         .duration(200)      
                         .style("opacity", .9);      
@@ -72,11 +87,20 @@ var scatter = (function() {
                         .style("left", (d3.event.pageX) + "px")     
                         .style("top", (d3.event.pageY - 28) + "px");    
                     })                  
-                .on("mouseout", function(d) {       
+                .on('mouseout', function(d) {       
                     tip.transition()        
                         .duration(500)      
                         .style("opacity", 0);   
                 });
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + (h - padding) + ")")
+                .call(xaxis);
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(" + padding + ",0)")
+                .call(yaxis);
 
         });
         
