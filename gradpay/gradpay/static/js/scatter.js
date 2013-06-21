@@ -43,10 +43,10 @@ var scatter = (function() {
                 xmax = d3.max(data, function(d) {return d[xv]}),
                 ymin = d3.min(data, function(d) {return d[yv]}),
                 ymax = d3.max(data, function(d) {return d[yv]});
-            var xscale = d3.scale.linear
+            var xscale = d3.scale.linear()
                 .domain([xmin, xmax])
                 .range([0, 100]);
-            var yscale = d3.scale.linear
+            var yscale = d3.scale.linear()
                 .domain([0, 100])
                 .range([ymin, ymax]);
             points.selectAll('path')
