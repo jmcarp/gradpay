@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/choro.css" />
+
+<script src="http://d3js.org/d3.v2.min.js?"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="{{ STATIC_URL }}/js/scatter.js"></script>
+
+<script type="text/javascript">
+    
+    // 
+    $(document).ready(function() {
+        scatter.init();
+        scatter.scatter('', 'num_resp', 'stipend');
+    });
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+    
+    <div class="container">
+        
+        <br />
+
+        <div>
+            
+            <input type="button" class="btn btn-primary" value="Stipends by State" onclick="choro.choro('', 'state', 'stipend');" />
+            <input type="button" class="btn btn-primary" value="Stipends by County" onclick="choro.choro('', 'county', 'stipend');" />
+                       
+        </div>
+
+        <h4>Distribution of Stipends</h4>
+        
+        <div id="svg-holder"></div>
+
+    </div>
+    
+{% endblock %}
