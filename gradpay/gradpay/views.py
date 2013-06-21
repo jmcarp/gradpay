@@ -129,7 +129,7 @@ def scatter_json(request):
     # Get aaData
     results = []
     for row in rows:
-        results = {column : vars[column].extract(row)
+        result = {column : vars[column].extract(row)
             for column in columns
             if vars[column].name in row}
         results.append(result)
