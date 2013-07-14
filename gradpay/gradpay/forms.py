@@ -67,6 +67,38 @@ class ScatterForm(forms.Form):
         widget=forms.CheckboxSelectMultiple
     )
 
+    def __init__(self, *args, **kwargs):
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                Div(
+                    Div(
+                        Div(
+                            Div('x_variable', css_class='span2'),
+                            Div('y_variable', css_class='span2'),
+                            Div('grouping_variables', css_class='span3'),
+                            css_class='row-fluid'
+                        ),
+                        Div(
+                            id='table-request-alert',
+                            css_class='row-fluid'
+                        ),
+                        Div(
+                            Button('#', 'Get Results', onclick='make_scatter()', css_class='btn btn-primary'),
+                            css_class='row-fluid'
+                        ),
+                        HTML('<hr>')
+                    ),
+                    css_class='offset1 span10'
+                ),
+                css_class='row-fluid'
+            )
+        )
+
+        super(ScatterForm, self).__init__(*args, **kwargs)
+
+
 class ResultForm(forms.Form):
     
     grouping_variables = forms.MultipleChoiceField(required=False, choices=GROUPING_CHOICES, initial=[choice[0] for choice in GROUPING_CHOICES], widget=forms.CheckboxSelectMultiple)
