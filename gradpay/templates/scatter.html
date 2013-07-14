@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block extrahead %}
 
@@ -28,13 +29,13 @@
 
         <div>
             
-            <input type="button" class="btn btn-primary" value="Stipends by State" onclick="choro.choro('', 'state', 'stipend');" />
-            <input type="button" class="btn btn-primary" value="Stipends by County" onclick="choro.choro('', 'county', 'stipend');" />
+            {% crispy form %}
                        
         </div>
 
         <h4>Distribution of Stipends</h4>
         
+
         <div id="svg-holder"></div>
 
     </div>
