@@ -35,13 +35,37 @@ remove_message = unicode(_('Hold down "Control", or "Command" on a Mac, to selec
 GROUPING_CHOICES = (
     ('institution', 'Institution'), 
     ('state', 'State'), 
-    ('department', 'Department')
+    ('department', 'Department'),
 )
 
 DISPLAY_CHOICES = (
     ('stipend', 'Stipend'), 
-    ('teaching', 'Teaching %')
+    ('teaching', 'Teaching %'),
 )
+
+NUMERIC_CHOICES = (
+    ('stipend', 'Stipend'), 
+    ('teaching_num', 'Teaching %'),
+    ('num_resp', 'Number of Responses'),
+)
+
+class ScatterForm(forms.Form):
+    
+    x_variable = forms.ChoiceField(
+        choices=NUMERIC_CHOICES,
+        initial=NUMERIC_CHOICES[0][0]
+    )
+
+    y_variable = forms.ChoiceField(
+        choices=NUMERIC_CHOICES,
+        initial=NUMERIC_CHOICES[0][0]
+    )
+
+    grouping_variables = forms.MultipleChoiceField(
+        choices=GROUPING_CHOICES, 
+        initial=[choice[0] for choice in GROUPING_CHOICES], 
+        widget=forms.CheckboxSelectMultiple
+    )
 
 class ResultForm(forms.Form):
     
