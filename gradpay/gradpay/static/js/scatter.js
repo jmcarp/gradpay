@@ -45,6 +45,10 @@ var scatter = (function() {
         $.getJSON(
             '/scatter_json?xv=' + xv + '&yv=' + yv
         ).done(function(data) {
+            
+            // Clear axes
+            d3.selectAll('axis')
+                .remove();
 
             // Get min / max values
             var xmin = d3.min(data, function(d) {return d[xv]}),
@@ -74,20 +78,16 @@ var scatter = (function() {
                 .scale(yscale)
                 .orient('left')
                 .ticks(5);
+            
+            // Push data to circles
+            var data = svg.selectAll('circle')
+                .data(data);
 
-            svg.selectAll('circle')
-                .data(data)
-                .enter()
+            //svg.selectAll('circle')
+            //    .data(data)
+            data.enter()
                 .append('circle')
-                .attr('cx', function(d) {
-                    return xscale(d[xv]);
-                })
-                .attr('cy', function(d) {
-                    return yscale(d[yv]);
-                })
-                .attr('r', function(d) {
-                    return rscale(d['num_resp']);
-                })
+                .attr('r', 0)
                 .on('mouseover', function(d) {      
                     tip.transition()        
                         .duration(200)      
@@ -101,6 +101,24 @@ var scatter = (function() {
                         .duration(500)      
                         .style("opacity", 0);   
                 });
+
+            data.transition(500)
+                .ease('exp')
+                .attr('cx', function(d) {
+                    return xscale(d[xv]);
+                })
+                .attr('cy', function(d) {
+                    return yscale(d[yv]);
+                })
+                .attr('r', function(d) {
+                    return rscale(d['num_resp']);
+                });
+
+            data.exit()
+                .transition(500)
+                .ease('exp')
+                .attr('r', 0)
+                .remove();
 
             svg.append("g")
                 .attr("class", "axis")
