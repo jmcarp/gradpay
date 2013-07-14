@@ -57,8 +57,8 @@ var scatter = (function() {
                 .domain([xmin, xmax])
                 .range([50, 50 + width]);
             var yscale = d3.scale.linear()
-                .domain([ymax, ymin])
-                .range([50, 50 + height]);
+                .domain([ymin, ymax])
+                .range([50 + height, 50]);
             
             // Define axes
             var xaxis = d3.svg.axis()
