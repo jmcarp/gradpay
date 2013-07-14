@@ -9,7 +9,7 @@ var scatter = (function() {
     var svg, points, tip;
     var height = 500,
         width = 500, 
-        padding = 25;
+        padding = 50;
     
     /* 
      * 
@@ -63,7 +63,7 @@ var scatter = (function() {
                 .range([height - padding, padding]);
             var rscale = d3.scale.linear()
                 .domain([rmin, rmax])
-                .range([5, 25]);
+                .range([5, 20]);
             
             // Define axes
             var xaxis = d3.svg.axis()
