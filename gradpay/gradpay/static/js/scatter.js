@@ -47,7 +47,7 @@ var scatter = (function() {
         ).done(function(data) {
             
             // Clear axes
-            d3.selectAll('axis')
+            d3.selectAll('.axis')
                 .remove();
 
             // Get min / max values
@@ -87,6 +87,12 @@ var scatter = (function() {
             //    .data(data)
             data.enter()
                 .append('circle')
+                .attr('cx', function(d) {
+                    return xscale(d[xv]);
+                })
+                .attr('cy', function(d) {
+                    return yscale(d[yv]);
+                })
                 .attr('r', 0)
                 .on('mouseover', function(d) {      
                     tip.transition()        
