@@ -108,11 +108,13 @@ def scatter_json(request):
         vars[xv].name : vars[xv].agg,
         vars[yv].name : vars[yv].agg,
     }
-    if 'num_resp' not in annotate_args:
-        annotate_args['num_resp'] = vars['num_resp'].agg
     
     # 
     columns = [xv, yv] + grouping_variables
+
+    if 'num_resp' not in annotate_args:
+        annotate_args['num_resp'] = vars['num_resp'].agg
+        columns.append('num_resp')
     
     # Get surveys
     rows = Survey.objects
