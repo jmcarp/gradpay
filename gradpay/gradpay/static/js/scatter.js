@@ -33,12 +33,8 @@ var scatter = (function() {
 
     }
 
-    /* 
-     * @class choro
-     * @static
-     * @param selector
-     * @param iv
-     * @param dv
+    /**
+     * @class scatter
      */
     function scatter(selector, xv, yv) {
         
@@ -59,10 +55,10 @@ var scatter = (function() {
             // Define scales
             var xscale = d3.scale.linear()
                 .domain([xmin, xmax])
-                .range([50, 250]);
+                .range([50, 50 + width]);
             var yscale = d3.scale.linear()
                 .domain([ymin, ymax])
-                .range([50, 250]);
+                .range([50, 50 + height]);
             
             // Define axes
             var xaxis = d3.svg.axis()
@@ -98,7 +94,7 @@ var scatter = (function() {
                         .duration(500)      
                         .style("opacity", 0);   
                 });
-
+            /*
             svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + (height - padding) + ")")
@@ -107,6 +103,7 @@ var scatter = (function() {
                 .attr("class", "axis")
                 .attr("transform", "translate(" + padding + ",0)")
                 .call(yaxis);
+            */
 
         });
         
