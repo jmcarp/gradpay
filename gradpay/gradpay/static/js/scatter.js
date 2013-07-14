@@ -51,6 +51,8 @@ var scatter = (function() {
                 xmax = d3.max(data, function(d) {return d[xv]}),
                 ymin = d3.min(data, function(d) {return d[yv]}),
                 ymax = d3.max(data, function(d) {return d[yv]});
+                rmin = d3.min(data, function(d) {return d['num_resp']}),
+                rmax = d3.max(data, function(d) {return d['num_resp']});
 
             // Define scales
             var xscale = d3.scale.linear()
@@ -58,7 +60,10 @@ var scatter = (function() {
                 .range([padding, width - padding]);
             var yscale = d3.scale.linear()
                 .domain([ymin, ymax])
-                .range([padding, height - padding]);
+                .range([height - padding, padding]);
+            var rscale = d3.scale.linear()
+                .domain([])
+                .range(5, 25);
             
             // Define axes
             var xaxis = d3.svg.axis()
@@ -80,7 +85,9 @@ var scatter = (function() {
                 .attr('cy', function(d) {
                     return yscale(d[yv]);
                 })
-                .attr('r', 5)
+                .attr('r', function(d) {
+                    return rscale(d['num_resp']); 
+                });
                 .on('mouseover', function(d) {      
                     tip.transition()        
                         .duration(200)      
