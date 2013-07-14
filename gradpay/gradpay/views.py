@@ -39,7 +39,9 @@ def fmt_factory(pct, rnd):
         num = round(num, rnd)
         if rnd == 0:
             num = int(num)
-        return '%s%s' % (num, app)
+        if app:
+            return '%s%s' % (num, app)
+        return num
     return fmt
 
 class VarInfo(object):
