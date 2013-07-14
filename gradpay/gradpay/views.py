@@ -8,6 +8,7 @@ from models import Degree
 
 # Import forms
 from forms import ResultForm
+from forms import ScatterForm
 from forms import SurveyForm
 
 import json
@@ -363,11 +364,23 @@ def get_stipends(request):
 
 def results_figure(request):
     
-    return render_to_response('hist.html', context_instance=RequestContext(request))
+    return render_to_response(
+        'hist.html', 
+        context_instance=RequestContext(request)
+    )
 
 def results_scatter(request):
 
-    return render_to_response('scatter.html', context_instance=RequestContext(request))
+    scatter_form = ScatterForm()
+
+    return render_to_response(
+        'scatter.html',
+        {
+            'skip_fluid' : True, 
+            'form' : scatter_form,
+        }, 
+        context_instance=RequestContext(request)
+    )
 
 def results_choro(request):
 
@@ -380,7 +393,7 @@ def results_table(request):
         'results.html', 
         {
             'skip_fluid' : True, 
-            'form' : result_form
+            'form' : result_form,
         }, 
         context_instance=RequestContext(request)
     )
