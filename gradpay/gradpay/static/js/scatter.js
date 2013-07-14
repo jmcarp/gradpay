@@ -9,7 +9,7 @@ var scatter = (function() {
     var svg, points, tip;
     var height = 500,
         width = 500, 
-        padding = 50;
+        padding = 25;
     
     /* 
      * 
@@ -33,8 +33,12 @@ var scatter = (function() {
 
     }
 
-    /**
-     * @class scatter
+    /* 
+     * @class choro
+     * @static
+     * @param selector
+     * @param iv
+     * @param dv
      */
     function scatter(selector, xv, yv) {
         
@@ -62,8 +66,8 @@ var scatter = (function() {
                 .domain([ymin, ymax])
                 .range([height - padding, padding]);
             var rscale = d3.scale.linear()
-                .domain([])
-                .range(5, 25);
+                .domain([rmin, rmax])
+                .range([5, 25]);
             
             // Define axes
             var xaxis = d3.svg.axis()
@@ -86,7 +90,7 @@ var scatter = (function() {
                     return yscale(d[yv]);
                 })
                 .attr('r', function(d) {
-                    return rscale(d['num_resp']); 
+                    return rscale(d['num_resp']);
                 });
                 .on('mouseover', function(d) {      
                     tip.transition()        
@@ -101,7 +105,7 @@ var scatter = (function() {
                         .duration(500)      
                         .style("opacity", 0);   
                 });
-            /*
+
             svg.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0," + (height - padding) + ")")
@@ -110,7 +114,6 @@ var scatter = (function() {
                 .attr("class", "axis")
                 .attr("transform", "translate(" + padding + ",0)")
                 .call(yaxis);
-            */
 
         });
         
