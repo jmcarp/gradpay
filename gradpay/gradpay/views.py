@@ -74,6 +74,12 @@ vars = {
         fmt_factory(True, 0), 
         agg=Avg('_teaching_fraction')
     ),
+    'teaching_num' : VarInfo(
+        'avg_teach_frac', 
+        'computed', 
+        fmt_factory(False, 0), 
+        agg=Avg('_teaching_fraction')
+    ),
     'num_resp' : VarInfo(
         'num_resp', 
         'computed', 

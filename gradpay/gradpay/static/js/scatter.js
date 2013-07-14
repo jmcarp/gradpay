@@ -34,11 +34,7 @@ var scatter = (function() {
     }
 
     /* 
-     * @class choro
-     * @static
-     * @param selector
-     * @param iv
-     * @param dv
+     * @class scatter
      */
     function scatter(selector, xv, yv) {
         
@@ -91,7 +87,7 @@ var scatter = (function() {
                 })
                 .attr('r', function(d) {
                     return rscale(d['num_resp']);
-                });
+                })
                 .on('mouseover', function(d) {      
                     tip.transition()        
                         .duration(200)      
