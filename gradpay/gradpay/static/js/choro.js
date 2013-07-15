@@ -21,7 +21,7 @@ var choro = (function() {
         
         // Create SVG object
         svg = d3.select(selector)
-            .append('svg:svg').
+            .append('svg:svg')
             .attr('height', height)
             .attr('width', width);
         
