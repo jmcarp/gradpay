@@ -65,7 +65,7 @@ class ScatterForm(forms.Form):
 
     grouping_variables = forms.MultipleChoiceField(
         choices=GROUPING_CHOICES, 
-        initial=GROUPING_CHOIDES[0][1],
+        initial=GROUPING_CHOICES[0][1],
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
