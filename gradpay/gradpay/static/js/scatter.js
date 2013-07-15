@@ -1,4 +1,4 @@
-/*
+/**
  * @module scatter
  * @author jmcarp
  */

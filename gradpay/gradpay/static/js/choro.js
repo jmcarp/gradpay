@@ -1,4 +1,4 @@
-/*
+/**
  * @module choro
  * @author jmcarp
  */
@@ -14,10 +14,10 @@ var choro = (function() {
     /* 
      * 
      */
-    function init() {
+    function init(selector) {
         
         // Create SVG object
-        svg = d3.select('body')
+        svg = d3.select(selector)
             .append('svg:svg');
         
         // Create counties group
@@ -37,7 +37,7 @@ var choro = (function() {
      * @param iv
      * @param dv
      */
-    function choro(selector, iv, dv) {
+    function choro(iv, dv) {
         
         // Initialize
         var data, values, cscale;
