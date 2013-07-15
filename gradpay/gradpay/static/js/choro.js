@@ -7,6 +7,9 @@ var choro = (function() {
 
     // Initialize SVG variables
     var svg, counties, states;
+    var height = 500,
+        width = 960, 
+        padding = 50;
     
     // Initialize underlay data
     var state_info, county_info;
@@ -18,7 +21,9 @@ var choro = (function() {
         
         // Create SVG object
         svg = d3.select(selector)
-            .append('svg:svg');
+            .append('svg:svg').
+            .attr('height', height)
+            .attr('width', width);
         
         // Create counties group
         counties = svg.append('svg:g')
