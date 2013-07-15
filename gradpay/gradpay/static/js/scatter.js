@@ -36,14 +36,19 @@ var scatter = (function() {
     /* 
      * @class scatter
      */
-    function scatter(selector, xv, yv) {
+    function scatter(selector, xv, yv, gv) {
         
+        // Impute defaults
+        xv = xv || 'stipend';
+        yv = yv || 'teaching_num';
+        gv = gv || 'institution';
+
         // Initialize
         var data, values;
 
         // 
         $.getJSON(
-            '/scatter_json?xv=' + xv + '&yv=' + yv
+            '/scatter_json?xv=' + xv + '&yv=' + yv + '&grouping_vars=' + gv;
         ).done(function(data) {
             
             // Clear axes
