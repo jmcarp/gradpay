@@ -48,7 +48,7 @@ var scatter = (function() {
 
         // 
         $.getJSON(
-            '/scatter_json?xv=' + xv + '&yv=' + yv + '&grouping_vars=' + gv;
+            '/scatter_json?xv=' + xv + '&yv=' + yv + '&grouping_vars=' + gv
         ).done(function(data) {
             
             // Clear axes

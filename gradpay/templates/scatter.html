@@ -22,9 +22,9 @@
         var xvar = $('[name="x_variable"]').val(),
             yvar = $('[name="y_variable"]').val();
 
-        var grouping_vars = $('[name="grouping_variables"]')
-            .map(function(idx, elm) {
-                return val_if_checked(elm)
+        var grouping_vars = $('[name="grouping_variables"]:checked')
+            .map(function() {
+                return $(this).val();
             })
             .get();
 
