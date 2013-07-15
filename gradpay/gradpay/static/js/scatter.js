@@ -14,10 +14,10 @@ var scatter = (function() {
     /* 
      * 
      */
-    function init() {
+    function init(selector) {
         
         // Create SVG object
-        svg = d3.select('body')
+        svg = d3.select(selector)
             .append('svg:svg')
             .attr('width', width)
             .attr('height', height);
@@ -36,7 +36,7 @@ var scatter = (function() {
     /* 
      * @class scatter
      */
-    function scatter(selector, xv, yv, gv) {
+    function scatter(xv, yv, gv) {
         
         // Impute defaults
         xv = xv || 'stipend';
