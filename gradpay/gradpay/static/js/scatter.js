@@ -103,7 +103,7 @@ var scatter = (function() {
                     tip.transition()        
                         .duration(200)      
                         .style("opacity", .9);      
-                    tip.html(d.institution)
+                    tip.html(d._label)
                         .style("left", (d3.event.pageX) + "px")     
                         .style("top", (d3.event.pageY - 28) + "px");    
                     })                  

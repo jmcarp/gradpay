@@ -143,6 +143,7 @@ def scatter_json(request):
         result = {column : vars[column].extract(row)
             for column in columns
             if vars[column].name in row}
+        result['_label'] = ' : '.join([result[group] for group in grouping_vars])
         results.append(result)
 
     # Serialize data to JSON
