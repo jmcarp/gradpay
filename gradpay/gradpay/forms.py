@@ -53,18 +53,21 @@ class ScatterForm(forms.Form):
     
     x_variable = forms.ChoiceField(
         choices=NUMERIC_CHOICES,
-        initial=NUMERIC_CHOICES[0][0]
+        initial=NUMERIC_CHOICES[0][0],
+        required=False
     )
 
     y_variable = forms.ChoiceField(
         choices=NUMERIC_CHOICES,
-        initial=NUMERIC_CHOICES[0][0]
+        initial=NUMERIC_CHOICES[0][0],
+        required=False
     )
 
     grouping_variables = forms.MultipleChoiceField(
         choices=GROUPING_CHOICES, 
         initial=[choice[0] for choice in GROUPING_CHOICES], 
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
 
     def __init__(self, *args, **kwargs):
@@ -75,8 +78,8 @@ class ScatterForm(forms.Form):
                 Div(
                     Div(
                         Div(
-                            Div('x_variable', css_class='span2'),
-                            Div('y_variable', css_class='span2'),
+                            Div('x_variable', css_class='span3'),
+                            Div('y_variable', css_class='span3'),
                             Div('grouping_variables', css_class='span3'),
                             css_class='row-fluid'
                         ),
