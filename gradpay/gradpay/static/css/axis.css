@@ -1,5 +1,6 @@
 
 /* Axis style */
+/* From http://alignedleft.com/tutorials/d3/axes/ */
 .axis path,
 .axis line {
     fill: none;
