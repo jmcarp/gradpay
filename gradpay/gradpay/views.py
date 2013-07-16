@@ -145,8 +145,9 @@ class Endpoint(View):
         results = []
         for row in rows:
             result = {
-                column : vars[column].extract(row)
-                for column in vars
+                var : vars[column].extract(row)
+                for var in vars
+                if vars[var].agg
             }
             results.append(result)
 
