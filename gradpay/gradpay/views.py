@@ -139,10 +139,10 @@ class Endpoint(View):
         return rows
     
     @classmethod
-    def to_json(cls, rows):
+    def to_data(cls, rows):
 
-        # Get results
         results = []
+
         for row in rows:
             result = {
                 var : vars[var].extract(row)
@@ -151,8 +151,18 @@ class Endpoint(View):
             }
             results.append(result)
 
+        return results
+
+    @classmethod
+    def to_json(cls, data):
+
         # Serialize data to JSON
         return json.dumps(results)
+
+    @classmethod
+    def to_html(cls, data):
+        
+        pass
 
 class InstitutionEndpoint(Endpoint):
     
