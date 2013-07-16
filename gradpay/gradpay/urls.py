@@ -8,6 +8,8 @@ from django.contrib.auth.forms import AuthenticationForm
 
 import settings
 
+from views import InstitutionEndpoint, DepartmentEndpoint
+
 urlpatterns = patterns('',
     url(r'^$', 'gradpay.views.home', name='home'),
     url(r'^about/$', 'gradpay.views.about', name='about'),
@@ -21,6 +23,8 @@ urlpatterns = patterns('',
     url(r'^results_json', 'gradpay.views.results_json', name='results_json'),
     url(r'^results/map/$', 'gradpay.views.results_choro', name='results_choro'),
     url(r'^results/scatter/$', 'gradpay.views.results_scatter', name='results_scatter'),
+    url(r'^api/institution/', InstitutionEndpoint.as_view()),
+    url(r'^api/department/', DepartmentEndpoint.as_view()),
     url(r'^choro_json', 'gradpay.views.choro_json', name='choro_json'),
     url(r'^scatter_json', 'gradpay.views.scatter_json', name='scatter_json'),
     url(r'^contact/$', 'gradpay.views.contact', name='contact'),

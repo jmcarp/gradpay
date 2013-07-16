@@ -95,6 +95,72 @@ sort_map = {
     'desc' : '-',
 }
 
+def phds_only(rows):
+
+    degrees = Degree.objects
+    phd_degree = degrees.filter(name__contains='PhD').get()
+    rows = rows.filter(degree__in=[phd_degree])
+
+from django.views.generic.base import View
+
+class Endpoint(View):
+    
+    def get(self, request):
+        
+        # 
+        rows = self.get_rows()
+
+        # 
+        json_data = self.to_json(rows)
+
+        # Return JSON
+        return HttpResponse(json_data, mimetype='application/json')
+    
+    @classmethod
+    def get_rows(cls):
+
+        # 
+        annotation_args = {
+            vars[var].name : vars[var].agg for var in vars
+            if vars[var].agg
+        }
+
+        # Get surveys
+        rows = Survey.objects
+        
+        # Compute group by
+        rows = rows\
+            .values(vars[cls.group_by].name)\
+            .annotate(**annotation_args)
+        
+        # Only show rows with minimum number of responses
+        rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
+
+        return rows
+    
+    @classmethod
+    def to_json(cls, rows):
+
+        # Get results
+        results = []
+        for row in rows:
+            result = {
+                column : vars[column].extract(row)
+                for column in vars
+            }
+            results.append(result)
+
+        # Serialize data to JSON
+        return json.dumps(results)
+
+class InstitutionEndpoint(Endpoint):
+    
+    group_by = 'institution'
+
+class DepartmentEndpoint(Endpoint):
+    
+    group_by = 'department'
+
 def scatter_json(request):
     """
     """
@@ -122,9 +188,10 @@ def scatter_json(request):
     
     # Only look at PhD students
     # TODO: Filter by degree type
-    degrees = Degree.objects
-    phd_degree = degrees.filter(name__contains='PhD').get()
-    rows = rows.filter(degree__in=[phd_degree])
+    phds_only(rows)
+    #degrees = Degree.objects
+    #phd_degree = degrees.filter(name__contains='PhD').get()
+    #rows = rows.filter(degree__in=[phd_degree])
 
     # Only look at activated responses
     rows = rows.filter(is_active=True)
@@ -137,7 +204,7 @@ def scatter_json(request):
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
-    # Get aaData
+    # Get results
     results = []
     for row in rows:
         result = {column : vars[column].extract(row)
