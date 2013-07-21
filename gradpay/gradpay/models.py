@@ -148,7 +148,18 @@ class Survey(models.Model):
 
     # Summary
     satisfaction = models.CharField(max_length=16, choices=choices.SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')
-    comments = models.TextField(blank=True, help_text='Enter any comments about your financial support and benefits here.')
+
+    career = models.CharField(
+        max_length=16,
+        help_text='Which of the following best describes your desired career after you complete your program?',
+        verbose_name='Career plans',
+        choices=choices.CAREER_CHOICES
+    )
+
+    comments = models.TextField(
+        blank=True, 
+        help_text='Enter any comments about your financial support and benefits here.'
+    )
 
     objects = SurveyManager()
 

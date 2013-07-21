@@ -205,8 +205,8 @@ class SurveyForm(ModelForm):
             ),
             Div(
                 Fieldset(
-                    'General comments',
-                    'satisfaction', 'comments',
+                    'General',
+                    'satisfaction', 'career', 'comments',
                 ),
                 id='comments', css_class='anchor'
             )
