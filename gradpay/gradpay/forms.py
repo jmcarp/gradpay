@@ -163,7 +163,7 @@ class SurveyForm(ModelForm):
                 HTML('''
                     <div class="alert alert-block alert-info">
                         Note: Participation in this survey is voluntary; you may opt out at any time.
-                        If you have any questions about GradPay, please contact us at <a href="gradpay.survey@gmail.com">gradpay.survey@gmail.com</a>.
+                        If you have any questions about GradPay, please contact us at <a href="mailto:gradpay.survey@gmail.com">gradpay.survey@gmail.com</a>.
                         You can see our privacy policy <a href="/privacy/">here</a>.
                     </div>
                 '''),
