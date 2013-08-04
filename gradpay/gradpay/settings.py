@@ -15,17 +15,6 @@ PROJECT_ROOT = os.path.dirname(__file__)
 LOGIN_REDIRECT_URL = '/'
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'gradpay',
-        'USER': 'jmcarp',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -204,6 +193,6 @@ DATABASES['default'] = dj_database_url.config()
 
 # Import local settings for development
 try:
-  from local_settings import *
+    from local_settings import *
 except:
-  pass
+    pass
