@@ -141,13 +141,39 @@ class Survey(models.Model):
     union_member = models.CharField(max_length=16, choices=choices.UNION_CHOICES, help_text='Are you represented by a union?')
     
     # Benefits
-    health_benefits = models.CharField(max_length=16, choices=choices.BENEFIT_CHOICES, help_text='Does your program provide health benefits?')
-    dental_benefits = models.CharField(max_length=16, choices=choices.BENEFIT_CHOICES, help_text='Does your program provide dental benefits?')
-    vision_benefits = models.CharField(max_length=16, choices=choices.BENEFIT_CHOICES, help_text='Does your program provide vision benefits?')
-    leave = models.CharField(max_length=16, choices=choices.LEAVE_CHOICES, verbose_name='Family/medical leave', help_text='Are you eligible for family and/or medical leave (e.g., leave for illness, a family member\'s illness, or childbirth)?')
+    health_benefits = models.CharField(
+        max_length=16, 
+        choices=choices.BENEFIT_CHOICES, 
+        help_text='Does your program provide health benefits?'
+    )
+
+    dental_benefits = models.CharField(
+        max_length=16, 
+        choices=choices.BENEFIT_CHOICES, 
+        help_text='Does your program provide dental benefits?'
+    )
+
+    vision_benefits = models.CharField(
+        max_length=16, 
+        choices=choices.BENEFIT_CHOICES, 
+        help_text='Does your program provide vision benefits?'
+    )
+
+    leave = models.CharField(
+        max_length=16, 
+        choices=choices.LEAVE_CHOICES, 
+        verbose_name='Family/medical leave', 
+        help_text='Are you eligible for family and/or medical leave (e.g., leave for illness, a family member\'s illness, or childbirth)?'
+    )
 
     # Summary
-    satisfaction = models.CharField(max_length=16, choices=choices.SATISFACTION_CHOICES, help_text='How satisfied are you with your financial support and benefits?', blank=False, default='...')
+    satisfaction = models.CharField(
+        max_length=16, 
+        choices=choices.SATISFACTION_CHOICES, 
+        help_text='How satisfied are you with your financial support and benefits?', 
+        blank=False, 
+        default='...'
+    )
 
     career = models.CharField(
         max_length=16,
