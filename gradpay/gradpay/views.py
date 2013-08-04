@@ -99,7 +99,7 @@ def phds_only(rows):
 
     degrees = Degree.objects
     phd_degree = degrees.filter(name__contains='PhD').get()
-    rows = rows.filter(degree__in=[phd_degree])
+    return rows.filter(degree__in=[phd_degree])
 
 from django.views.generic.base import View
 
@@ -199,7 +199,7 @@ def scatter_json(request):
     
     # Only look at PhD students
     # TODO: Filter by degree type
-    phds_only(rows)
+    rows = phds_only(rows)
     #degrees = Degree.objects
     #phd_degree = degrees.filter(name__contains='PhD').get()
     #rows = rows.filter(degree__in=[phd_degree])
@@ -476,6 +476,10 @@ def results_table(request):
         }, 
         context_instance=RequestContext(request)
     )
+
+def privacy(request):
+
+    return render_to_response('privacy.html', context_instance=RequestContext(request))
 
 def contact(request):
 
