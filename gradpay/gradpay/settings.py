@@ -1,6 +1,6 @@
 # Django settings for gradpay project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
