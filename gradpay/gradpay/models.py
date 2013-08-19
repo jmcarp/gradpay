@@ -268,7 +268,7 @@ class Survey(models.Model):
 
     objects = SurveyManager()
 
-    def save(self):
+    def save_hidden(self):
         """ Update auto-generated fields. """
 
         self._teaching_fraction = self.teaching_terms / float(self.total_terms)
