@@ -123,22 +123,101 @@ class Survey(models.Model):
     )
 
     # Current year support
-    stipend = models.PositiveIntegerField(verbose_name='<strong>Yearly</strong> stipend', help_text='Please enter your <strong>yearly</strong> pre-tax stipend or salary in US dollars, including any summer stipend. If you are paid in a different currency, please <a href="http://finance.yahoo.com/currency-converter/#to=USD" target="_blank">convert your stipend</a> to US dollars.')
-    support_types = models.ManyToManyField(Support, blank=True, help_text='Which of the following funds your stipend or tuition, if any? Choose all that apply.')
-    summer_stipend = models.CharField(max_length=16, choices=choices.SUMMER_STIPEND_CHOICES, help_text='Do you receive a summer stipend?')
-    tuition_coverage = models.CharField(max_length=16, choices=choices.TUITION_CHOICES, help_text='Are your tuition fees covered?')
-    tuition_amount = models.PositiveIntegerField(help_text='How much do you pay in tuition (not including tuition covered by your program)?', default=0)
-    fees = models.CharField(max_length=16, choices=choices.FEES_CHOICES, help_text='Are you required to pay any fees for your program (course fees, lab fees, etc.)?')
-    fees_amount = models.PositiveIntegerField(help_text='How much do you pay in fees (not including fees covered by your program)?', default=0)
+    stipend = models.PositiveIntegerField(
+        verbose_name='<strong>Yearly</strong> stipend', 
+        help_text='''Please enter your <strong>yearly</strong> pre-tax 
+            stipend or salary in US dollars, including any summer stipend. 
+            If you are paid in a different currency, please 
+            <a href="http://finance.yahoo.com/currency-converter/#to=USD" 
+            target="_blank">convert your stipend</a> to US dollars.'''
+    )
+    support_types = models.ManyToManyField(
+        Support, 
+        blank=True, 
+        help_text='''Which of the following funds your stipend or 
+            tuition, if any? Choose all that apply.'''
+    )
+    summer_stipend = models.CharField(
+        max_length=16, 
+        choices=choices.SUMMER_STIPEND_CHOICES, 
+        help_text='Do you receive a summer stipend?'
+    )
+    tuition_coverage = models.CharField(
+        max_length=16, 
+        choices=choices.TUITION_CHOICES, 
+        help_text='Are your tuition fees covered?'
+    )
+    tuition_amount = models.PositiveIntegerField(
+        default=0,
+        help_text='''How much do you pay in tuition (not including 
+            tuition covered by your program)?'''
+    )
+    fees = models.CharField(
+        max_length=16, 
+        choices=choices.FEES_CHOICES, 
+        help_text='''Are you required to pay any fees for your 
+            program (course fees, lab fees, etc.)?'''
+    )
+    fees_amount = models.PositiveIntegerField(
+        default=0,
+        help_text='''How much do you pay in fees (not including 
+            fees covered by your program)?'''
+    )
 
     # General support
-    total_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to be enrolled in your program.', validators=[MinValueValidator(1)])
-    teaching_terms = models.PositiveIntegerField(help_text='Total number of terms you expect to work as a teaching assistant or instructor.')
-    _teaching_fraction = models.FloatField(blank=False, editable=False)
-    contract = models.CharField(max_length=16, choices=choices.CONTRACT_CHOICES, help_text='If you have a contract, funding plan, or other agreement describing your support, how often is it negotiated?')
-    part_time_work = models.CharField(max_length=16, choices=choices.PART_TIME_CHOICES, verbose_name='Part-time work', help_text='Have you or do you plan to work at a part-time job during your graduate program (not including teaching or research assistantships)?')
-    student_loans = models.CharField(max_length=16, choices=choices.LOAN_CHOICES, help_text='Have you or do you plan to take out student loans <strong>during your graduate program</strong>? Do not include loans taken out before graduate school.')
-    union_member = models.CharField(max_length=16, choices=choices.UNION_CHOICES, help_text='Are you represented by a union?')
+    total_terms = models.PositiveIntegerField(
+        help_text='Total number of terms you expect to be enrolled in your program.', 
+        validators=[MinValueValidator(1)]
+    )
+    teaching_terms = models.PositiveIntegerField(
+        help_text='Total number of terms you expect to work as a teaching assistant or instructor.'
+    )
+    _teaching_fraction = models.FloatField(
+        blank=False, 
+        editable=False
+    )
+    contract = models.CharField(
+        max_length=16, 
+        choices=choices.CONTRACT_CHOICES, 
+        help_text='''If you have a contract, funding plan, or other 
+            agreement describing your support, how often is it negotiated?'''
+    )
+    part_time_work = models.CharField(
+        max_length=16, 
+        choices=choices.PART_TIME_CHOICES, 
+        verbose_name='Part-time work', 
+        help_text='''Have you or do you plan to work at a part-time job 
+            during your graduate program (not including teaching or 
+            research assistantships)?'''
+    )
+    student_loans = models.CharField(
+        max_length=16, 
+        choices=choices.LOAN_CHOICES, 
+        help_text='''Have you or do you plan to take out student loans 
+            <strong>during your graduate program</strong>? Do not include 
+            loans taken out before graduate school.'''
+    )
+    _has_student_loans = models.IntegerField(
+        blank=False, 
+        editable=False
+    )
+    _has_part_time_work = models.IntegerField(
+        blank=False,
+        editable=False
+    )
+    _has_fellowship = models.IntegerField(
+        blank=False,
+        editable=False
+    )
+    union_member = models.CharField(
+        max_length=16, 
+        choices=choices.UNION_CHOICES, 
+        help_text='Are you represented by a union?'
+    )
+    _has_union = models.IntegerField(
+        blank=False,
+        editable=False
+    )
     
     # Benefits
     health_benefits = models.CharField(
@@ -190,6 +269,14 @@ class Survey(models.Model):
     objects = SurveyManager()
 
     def save(self):
-        
+        """ Update auto-generated fields. """
+
         self._teaching_fraction = self.teaching_terms / float(self.total_terms)
+        self._has_student_loans = int(self.student_loans == 'YS')
+        self._has_part_time_work = int(self.part_time_work == 'YS')
+        self._is_union_member = int(self.union_member == 'YS')
+
+        fellowship = Support.objects.get(name='Competitive grant/fellowship to student')
+        self._has_fellowship = int(fellowship in self.support_types.all())
+
         super(Survey, self).save()

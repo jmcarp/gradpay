@@ -41,11 +41,15 @@ GROUPING_CHOICES = (
 DISPLAY_CHOICES = (
     ('stipend', 'Stipend'), 
     ('teaching', 'Teaching %'),
+    ('loans_fmt', 'Student Loans'),
 )
 
 NUMERIC_CHOICES = (
     ('stipend', 'Stipend'), 
+    ('loans', 'Student Loans'),
     ('teaching_num', 'Teaching %'),
+    ('part_time_work', 'Part-time Work'),
+    ('fellowship', 'Student Fellowship'),
     ('num_resp', 'Number of Responses'),
 )
 

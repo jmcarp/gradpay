@@ -7,17 +7,10 @@
 <link rel="stylesheet" type="text/css" href="/static/css/axis.css" />
 
 <script src="http://d3js.org/d3.v2.min.js?"></script>
-<script src="http://d3js.org/queue.v1.min.js"></script>
 <script src="{{ STATIC_URL }}/js/scatter.js"></script>
 
 <script type="text/javascript">
     
-    // 
-    $(document).ready(function() {
-        scatter.init('#svg-holder');
-        //scatter.scatter('', 'stipend', 'teaching_num');
-    });
-
     function make_scatter() {
         
         var xvar = $('[name="x_variable"]').val(),
@@ -32,6 +25,12 @@
         scatter.scatter(xvar, yvar, grouping_vars);
 
     }
+
+    // 
+    $(document).ready(function() {
+        scatter.init('#svg-holder');
+        make_scatter();
+    });
 
 </script>
 

@@ -88,6 +88,27 @@ vars = {
         'computed', 
         agg=Count('stipend')
     ),
+    'loans_fmt' : VarInfo(
+        '_has_student_loans',
+        'computed',
+        fmt_factory(True, 0), 
+        agg=Avg('_has_student_loans')
+    ),
+    'loans' : VarInfo(
+        '_has_student_loans',
+        'computed',
+        agg=Avg('_has_student_loans')
+    ),
+    'part_time_work' : VarInfo(
+        '_has_part_time_work',
+        'computed',
+        agg=Avg('_has_part_time_work')
+    ),
+    'fellowship' : VarInfo(
+        '_has_fellowship',
+        'computed',
+        agg=Avg('_has_fellowship')
+    ),
 }
 
 sort_map = {
