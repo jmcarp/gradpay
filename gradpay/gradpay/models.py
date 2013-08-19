@@ -214,7 +214,7 @@ class Survey(models.Model):
         choices=choices.UNION_CHOICES, 
         help_text='Are you represented by a union?'
     )
-    _has_union = models.IntegerField(
+    _is_union_member = models.IntegerField(
         blank=False,
         editable=False
     )
