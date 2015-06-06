@@ -1,4 +1,3 @@
-# Imports
 import os
 import json
 
@@ -8,13 +7,13 @@ path, _ = os.path.split(os.path.realpath(__file__))
 filename = '%s/fips.json' % (path)
 
 class Fips(object):
-    
+
     def __init__(self, filename=filename):
-        
+
         # Load JSON data
         with open(filename) as fh:
             self.data = json.load(fh)
-        
+
         # Initialize maps
         self.map = {}
         self.map['state_to_code'] = {}
@@ -36,7 +35,7 @@ class Fips(object):
             else:
                 self.map['count_to_code'][name] = code
                 self.map['code_to_count'][code] = name
-    
+
     # Lookup functions
 
     def state_to_code(self, state):

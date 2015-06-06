@@ -3,9 +3,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import AuthenticationForm
-
 import settings
 
 from views import InstitutionEndpoint, DepartmentEndpoint

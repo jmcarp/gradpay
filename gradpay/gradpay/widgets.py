@@ -1,16 +1,17 @@
-# Django imports
-from django.utils.translation import ugettext as _
-from django.utils.encoding import force_unicode
-from django.utils.safestring import mark_safe
-
 from itertools import chain
-from django.utils.html import escape, conditional_escape
-from django.forms.widgets import SelectMultiple
+
 from django.forms.widgets import flatatt
+from django.forms.widgets import SelectMultiple
+
+from django.utils.safestring import mark_safe
+from django.utils.encoding import force_unicode
+from django.utils.html import escape, conditional_escape
 
 from selectable.forms import AutoCompleteWidget
+
+
 class FKAutoCompleteWidget(AutoCompleteWidget):
-  
+
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
@@ -24,15 +25,16 @@ class FKAutoCompleteWidget(AutoCompleteWidget):
             final_attrs['value'] = force_unicode(self._format_value(model_value))
         return mark_safe(u'<input%s />' % flatatt(final_attrs))
 
+
 class HelpSelectMultiple(SelectMultiple):
-  
+
     def __init__(self, *args, **kwargs):
         self.help_texts = kwargs.pop('help_texts', [])
         self.help_place = kwargs.pop('help_place', '')
         super(HelpSelectMultiple, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, choices=()):
-        if value is None: value = []
+        value = value or []
         final_attrs = self.build_attrs(attrs, name=name)
         output = [u'<select multiple="multiple"%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, value)

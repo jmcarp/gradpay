@@ -1,14 +1,14 @@
-# Imports
 import time
 from pygeocoder import Geocoder, GeocoderError
 
-# Project imports
 import fips
+
 
 f = fips.Fips()
 
+
 def geocode_institution(name, city, state):
-    
+
     query = ', '.join([name, city, state])
 
     try:
@@ -22,10 +22,10 @@ def geocode_institution(name, city, state):
             if 'administrative_area_level_2' in comp['types']:
                 county = comp['long_name']
                 break
-    
+
     if 'county' not in locals():
         return '', ''
-    
+
     code = f.count_to_code(
         ('%s, %s' % (state, county)).lower()
     )

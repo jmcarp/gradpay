@@ -83,11 +83,11 @@ LEAVE_CHOICES = (
 )
 
 CAREER_CHOICES = (
-    ('academic',   'Academia / Education'),
+    ('academic', 'Academia / Education'),
     ('government', 'Government'),
-    ('private',    'Private Sector'),
-    ('nonprofit',  'Not-for-profit / NGO'),
-    ('other',      'Other'),
+    ('private', 'Private Sector'),
+    ('nonprofit', 'Not-for-profit / NGO'),
+    ('other', 'Other'),
 )
 
 SATISFACTION_CHOICES = (

@@ -1,4 +1,3 @@
-# 
 import json
 import argparse
 
@@ -9,7 +8,7 @@ args = parser.parse_args()
 
 jdata = []
 for jfile in args.files:
-  filedata = json.load(open(jfile))
-  jdata.extend(filedata)
+    filedata = json.load(open(jfile))
+    jdata.extend(filedata)
 
 print json.dumps(jdata, indent=2)

@@ -1,4 +1,4 @@
-# Django imports 
+# Django imports
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -24,9 +24,9 @@ import re
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 relation_map = {
-    'institution' : 'institution__name',
-    'state' : 'institution__state',
-    'department' : 'department__name',
+    'institution': 'institution__name',
+    'state': 'institution__state',
+    'department': 'department__name',
 }
 
 def fmt_factory(pct, rnd):
@@ -46,7 +46,7 @@ def fmt_factory(pct, rnd):
     return fmt
 
 class VarInfo(object):
-    
+
     def __init__(self, name, type, fun=None, agg=None):
         self.name = name
         self.type = type
@@ -60,51 +60,51 @@ class VarInfo(object):
         return val
 
 vars = {
-    'institution' : VarInfo('institution__name', 'stored'),
-    'state' : VarInfo('institution__state', 'stored'),
-    'state_code' : VarInfo('institution__state_code', 'stored'),
-    'county_code' : VarInfo('institution__county_code', 'stored'),
-    'department' : VarInfo('department__name', 'stored'),
-    'stipend' : VarInfo(
-        'avg_stipend', 
-        'computed', 
-        fmt_factory(False, 0), 
+    'institution': VarInfo('institution__name', 'stored'),
+    'state': VarInfo('institution__state', 'stored'),
+    'state_code': VarInfo('institution__state_code', 'stored'),
+    'county_code': VarInfo('institution__county_code', 'stored'),
+    'department': VarInfo('department__name', 'stored'),
+    'stipend': VarInfo(
+        'avg_stipend',
+        'computed',
+        fmt_factory(False, 0),
         agg=Median('stipend')
     ),
-    'teaching' : VarInfo(
-        'avg_teach_frac', 
-        'computed', 
-        fmt_factory(True, 0), 
+    'teaching': VarInfo(
+        'avg_teach_frac',
+        'computed',
+        fmt_factory(True, 0),
         agg=Avg('_teaching_fraction')
     ),
-    'teaching_num' : VarInfo(
-        'avg_teach_frac', 
-        'computed', 
-        fmt_factory(False, 2), 
+    'teaching_num': VarInfo(
+        'avg_teach_frac',
+        'computed',
+        fmt_factory(False, 2),
         agg=Avg('_teaching_fraction')
     ),
-    'num_resp' : VarInfo(
-        'num_resp', 
-        'computed', 
+    'num_resp': VarInfo(
+        'num_resp',
+        'computed',
         agg=Count('stipend')
     ),
-    'loans_fmt' : VarInfo(
+    'loans_fmt': VarInfo(
         '_has_student_loans',
         'computed',
-        fmt_factory(True, 0), 
+        fmt_factory(True, 0),
         agg=Avg('_has_student_loans')
     ),
-    'loans' : VarInfo(
+    'loans': VarInfo(
         '_has_student_loans',
         'computed',
         agg=Avg('_has_student_loans')
     ),
-    'part_time_work' : VarInfo(
+    'part_time_work': VarInfo(
         '_has_part_time_work',
         'computed',
         agg=Avg('_has_part_time_work')
     ),
-    'fellowship' : VarInfo(
+    'fellowship': VarInfo(
         '_has_fellowship',
         'computed',
         agg=Avg('_has_fellowship')
@@ -112,8 +112,8 @@ vars = {
 }
 
 sort_map = {
-    'asc' : '',
-    'desc' : '-',
+    'asc': '',
+    'desc': '-',
 }
 
 def phds_only(rows):
@@ -125,40 +125,42 @@ def phds_only(rows):
 from django.views.generic.base import View
 
 class Endpoint(View):
-    
+
     def get(self, request):
-        
-        # 
+
+        #
         rows = self.get_rows()
 
-        # 
+        #
         json_data = self.to_json(rows)
 
         # Return JSON
         return HttpResponse(json_data, mimetype='application/json')
-    
+
     @classmethod
     def get_rows(cls):
 
-        # 
+        #
         annotation_args = {
-            vars[var].name : vars[var].agg for var in vars
+            vars[var].name: vars[var].agg for var in vars
             if vars[var].agg
         }
 
         # Get surveys
         rows = Survey.objects
-        
+
         # Compute group by
-        rows = rows\
-            .values(vars[cls.group_by].name)\
-            .annotate(**annotation_args)
-        
+        rows = rows.values(
+            vars[cls.group_by].name
+        ).annotate(
+            **annotation_args
+        )
+
         # Only show rows with minimum number of responses
         rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
         return rows
-    
+
     @classmethod
     def to_data(cls, rows):
 
@@ -166,7 +168,7 @@ class Endpoint(View):
 
         for row in rows:
             result = {
-                var : vars[var].extract(row)
+                var: vars[var].extract(row)
                 for var in vars
                 if vars[var].agg
             }
@@ -182,15 +184,15 @@ class Endpoint(View):
 
     @classmethod
     def to_html(cls, data):
-        
+
         pass
 
 class InstitutionEndpoint(Endpoint):
-    
+
     group_by = 'institution'
 
 class DepartmentEndpoint(Endpoint):
-    
+
     group_by = 'department'
 
 def scatter_json(request):
@@ -204,20 +206,20 @@ def scatter_json(request):
 
     # Get annotation arguments
     annotate_args = {
-        vars[xv].name : vars[xv].agg,
-        vars[yv].name : vars[yv].agg,
+        vars[xv].name: vars[xv].agg,
+        vars[yv].name: vars[yv].agg,
     }
-    
-    # 
+
+    #
     columns = [xv, yv] + grouping_variables
 
     if 'num_resp' not in annotate_args:
         annotate_args['num_resp'] = vars['num_resp'].agg
         columns.append('num_resp')
-    
+
     # Get surveys
     rows = Survey.objects
-    
+
     # Only look at PhD students
     # TODO: Filter by degree type
     rows = phds_only(rows)
@@ -229,17 +231,19 @@ def scatter_json(request):
     rows = rows.filter(is_active=True)
 
     # Compute average stipend
-    rows = rows\
-        .values(*[vars[g].name for g in grouping_variables])\
-        .annotate(**annotate_args)
-    
+    rows = rows.values(
+        *[vars[g].name for g in grouping_variables]
+    ).annotate(
+        **annotate_args
+    )
+
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
     # Get results
     results = []
     for row in rows:
-        result = {column : vars[column].extract(row)
+        result = {column: vars[column].extract(row)
             for column in columns
             if vars[column].name in row}
         result['_label'] = ' : '.join([result[g] for g in grouping_variables])
@@ -250,10 +254,10 @@ def scatter_json(request):
 
     # Return JSON
     return HttpResponse(json_data, mimetype='application/json')
-    
+
 def choro_json(request):
     '''Get data for choropleth.
-    
+
     (Request) args:
         iv : Independent variable for grouping data. Should be
              'state' or 'county'
@@ -262,23 +266,23 @@ def choro_json(request):
     Returns:
         HTTPResponse containing JSON data--dictionary mapping
         state / county FIPS codes to aggregated data
-    
+
     '''
-    
+
     # Get variables
     iv = request.GET.get('iv', 'state')
     dv = request.GET.get('dv', 'stipend')
 
     # Get annotation params
     annotate_args = {
-        vars[dv].name : vars[dv].agg,
+        vars[dv].name: vars[dv].agg,
     }
     if 'num_resp' not in annotate_args:
         annotate_args['num_resp'] = vars['num_resp'].agg
 
     # Get surveys
     rows = Survey.objects
-    
+
     # Only look at PhD students
     # TODO: Filter by degree type
     degrees = Degree.objects
@@ -289,10 +293,12 @@ def choro_json(request):
     rows = rows.filter(is_active=True)
 
     # Compute aggregate
-    rows = rows\
-        .values(vars[iv].name)\
-        .annotate(**annotate_args)
-    
+    rows = rows.values(
+        vars[iv].name
+    ).annotate(
+        **annotate_args
+    )
+
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_CHORO_ROWS)
 
@@ -302,7 +308,7 @@ def choro_json(request):
         key = vars[iv].extract(row)
         val = vars[dv].extract(row)
         result[key] = val
-    
+
     # Serialize data to JSON
     json_data = json.dumps(result)
 
@@ -318,30 +324,30 @@ def results_json(request):
         sSearch : search term
         ...
     Returns:
-        HTTPResponse containing JSON data for request in 
+        HTTPResponse containing JSON data for request in
         DataTables-friendly format
-    
+
     """
-    
+
     # Get sEcho [datatables security param]
     sEcho = request.GET.get('sEcho', 0)
 
     # Get search units
     grouping_variables = request.GET.get('grouping_vars', 'institution')
     grouping_variables = grouping_variables.split(',')
-    
+
     # Get display variables
     display_variables = request.GET.get('display_vars', 'salary')
     display_variables = display_variables.split(',')
     if not display_variables[0]:
-        display_variables = [] 
+        display_variables = []
     display_variables.append('num_resp')
 
     # Get annotation arguments
     annotate_args = {}
     for dv in display_variables:
         annotate_args[vars[dv].name] = vars[dv].agg
-    
+
     columns = grouping_variables + display_variables
 
     # Get search term
@@ -349,10 +355,10 @@ def results_json(request):
     like_lookup = ''
     if like:
         visible_stored_vars = [vars[col] for col in columns if vars[col].type == 'stored']
-        like_lookup = Q(**{visible_stored_vars[0].name + '__icontains' : like})
+        like_lookup = Q(**{visible_stored_vars[0].name + '__icontains': like})
         for var in visible_stored_vars[1:]:
-            like_lookup = like_lookup | Q(**{var.name + '__icontains' : like})
-    
+            like_lookup = like_lookup | Q(**{var.name + '__icontains': like})
+
     # Sorting
     order_by_fields = []
     n_sort_cols = request.GET.get('iSortingCols')
@@ -371,10 +377,10 @@ def results_json(request):
     offset = max(0, int(offset))
     limit = request.GET.get('iDisplayLength', 10)
     limit = min(int(limit), 100)
-    
+
     # Get surveys
     rows = Survey.objects
-    
+
     # Only look at PhD students
     # TODO: Filter by degree type
     degrees = Degree.objects
@@ -389,10 +395,12 @@ def results_json(request):
         rows = rows.filter(like_lookup)
 
     # Compute average stipend
-    rows = rows\
-        .values(*[vars[g].name for g in grouping_variables])\
-        .annotate(**annotate_args)
-    
+    rows = rows.values(
+        *[vars[g].name for g in grouping_variables]
+    ).annotate(
+        **annotate_args
+    )
+
     # Only show rows with minimum number of responses
     rows = rows.filter(num_resp__gte=settings.MIN_TABLE_ROWS)
 
@@ -403,21 +411,24 @@ def results_json(request):
     count_total = rows.count()
 
     # Apply offset and limit
-    rows = rows[offset : offset + limit]
-    
+    rows = rows[offset:offset + limit]
+
     # Get aaData
     aaData = []
     for row in rows:
-        aaData.append([vars[col].extract(row) for col in columns if vars[col].name in row])
+        aaData.append([
+            vars[col].extract(row) for col in columns
+            if vars[col].name in row
+        ])
 
     # Assemble data
     data = {
-        'sEcho' : sEcho,
-        'iTotalRecords' : count_total,
-        'iTotalDisplayRecords' : count_total,
-        'aaData' : aaData,
+        'sEcho': sEcho,
+        'iTotalRecords': count_total,
+        'iTotalDisplayRecords': count_total,
+        'aaData': aaData,
     }
-    
+
     # Serialize data to JSON
     json_data = json.dumps(data)
 
@@ -425,47 +436,51 @@ def results_json(request):
     return HttpResponse(json_data, mimetype='application/json')
 
 def channel(request):
-    
+
     return render_to_response('social/facebook-channel.html')
 
 def home(request):
-    
+
     # Get data counts
     surveys = Survey.objects.filter(is_active=True)
     context = {
-        'n_resp' : surveys.count(),
-        'n_inst' : surveys.values('institution').annotate(Count('stipend')).count(),
-        'n_dept' : surveys.values('department').annotate(Count('stipend')).count(),
+        'n_resp': surveys.count(),
+        'n_inst': surveys.values('institution').annotate(Count('stipend')).count(),
+        'n_dept': surveys.values('department').annotate(Count('stipend')).count(),
     }
 
-    return render_to_response('home.html', context, context_instance=RequestContext(request))
+    return render_to_response(
+        'home.html',
+        context,
+        context_instance=RequestContext(request),
+    )
 
 def linkedinfo(request):
-    
+
     return render_to_response('linkedinfo.html', context_instance=RequestContext(request))
 
 def about(request):
-    
+
     return render_to_response('about.html', context_instance=RequestContext(request))
 
 def faq(request):
-    
+
     return render_to_response('faq.html', context_instance=RequestContext(request))
 
 def get_stipends(request):
-    
+
     # Get stipends from database
     stipends = Survey.objects.filter(is_active=True).values('stipend')
     stipends = [stipend['stipend'] for stipend in stipends]
     stipends_json = json.dumps(stipends)
-    
+
     # Return JSON
     return HttpResponse(stipends_json, mimetype='application/json')
 
 def results_figure(request):
-    
+
     return render_to_response(
-        'hist.html', 
+        'hist.html',
         context_instance=RequestContext(request)
     )
 
@@ -476,9 +491,9 @@ def results_scatter(request):
     return render_to_response(
         'scatter.html',
         {
-            'skip_fluid' : True, 
-            'form' : scatter_form,
-        }, 
+            'skip_fluid': True,
+            'form': scatter_form,
+        },
         context_instance=RequestContext(request)
     )
 
@@ -487,14 +502,14 @@ def results_choro(request):
     return render_to_response('choro.html', context_instance=RequestContext(request))
 
 def results_table(request):
-    
+
     result_form = ResultForm()
     return render_to_response(
-        'results.html', 
+        'results.html',
         {
-            'skip_fluid' : True, 
-            'form' : result_form,
-        }, 
+            'skip_fluid': True,
+            'form': result_form,
+        },
         context_instance=RequestContext(request)
     )
 
@@ -507,23 +522,24 @@ def contact(request):
     return render_to_response('contact.html', context_instance=RequestContext(request))
 
 def activate(request, key):
-    
+
     # Default status is failure
     status = 'failure'
-    
+
     # Skip unless key matches hash pattern
     if SHA1_RE.search(key):
 
         try:
-            
+
             # Find survey
             survey = Survey.objects.get(activation_key=key)
 
             # Delete users w/ same email
-            Survey.objects.\
-                filter(email=survey.email).\
-                exclude(activation_key=key).\
-                delete()
+            Survey.objects.filter(
+                email=survey.email
+            ).exclude(
+                activation_key=key
+            ).delete()
 
             # Activate target survey
             survey.is_active = True
@@ -532,17 +548,17 @@ def activate(request, key):
 
             # Success
             status = 'success'
-        
+
         # Couldn't find survey
         except Survey.DoesNotExist:
-            
+
             pass
 
     # Return response
     return render_to_response(
-        'activation_complete.html', 
-        {'status' : status},
-        context_instance=RequestContext(request)
+        'activation_complete.html',
+        {'status': status},
+        context_instance=RequestContext(request),
     )
 
 def survey(request):
@@ -553,9 +569,16 @@ def survey(request):
         if survey_form.is_valid():
             survey_form.save()
             # Redirect
-            return render_to_response('survey_complete.html', context_instance=RequestContext(request))
+            return render_to_response(
+                'survey_complete.html',
+                context_instance=RequestContext(request),
+            )
     else:
         survey_form = SurveyForm()
 
     # Display form
-    return render_to_response('survey.html', {'form' : survey_form}, RequestContext(request))
+    return render_to_response(
+        'survey.html',
+        {'form': survey_form},
+        RequestContext(request),
+    )

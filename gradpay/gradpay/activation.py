@@ -1,18 +1,16 @@
-
-# Django imports
-from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
 from django.core.mail import send_mail
+from django.contrib.sites.models import Site
+from django.template.loader import render_to_string
 
-# Project imports
 import settings
+
 
 def send_activation_email(survey):
 
     # Build email context
     mail_context = {
-      'activation_key' : survey.activation_key,
-      'site' : Site.objects.get_current(),
+        'activation_key': survey.activation_key,
+        'site': Site.objects.get_current(),
     }
 
     # Build email subject
@@ -21,6 +19,6 @@ def send_activation_email(survey):
 
     # Build email message
     message = render_to_string('activation_email.txt', mail_context)
-    
+
     # Send email
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [survey.email])
