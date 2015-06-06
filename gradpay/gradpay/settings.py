@@ -100,7 +100,6 @@ WSGI_APPLICATION = 'gradpay.wsgi.application'
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, '../templates'),
-#    '/Users/jmcarp/Dropbox/projects/gradpay/gradpay/templates',
 )
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
@@ -127,26 +126,10 @@ ACCOUNT_ACTIVATION_DAYS = 7
 DEFAULT_FROM_EMAIL = 'gradpay.survey@gmail.com'
 
 # Email settings
-"""
-mail_client = 'gmail'
-
-if mail_client == 'sendgrid':
-    EMAIL_HOST_USER = os.environ['SENDGRID_USERNAME']
-    EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
-    EMAIL_HOST = 'smtp.sendgrid.net'
-elif mail_client == 'gmail':
-    EMAIL_HOST_USER = os.environ['GMAIL_SMTP_USER']
-    EMAIL_HOST_PASSWORD = os.environ['GMAIL_SMTP_PASSWORD']
-    EMAIL_HOST = 'smtp.gmail.com'
-
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-"""
-# 
 
 # Get Mandrill API key
 # Note: this environment variable is set automatically
-# on Heroku but must be added to .bash_profile for local 
+# on Heroku but must be added to .bash_profile for local
 # testing
 import os
 MANDRILL_API_KEY = os.environ.get('MANDRILL_APIKEY')
