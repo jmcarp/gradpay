@@ -7,7 +7,6 @@ import re
 # LinkedIn validation imports
 import requests
 import urlparse
-from pyquery import PyQuery
 
 # Django imports
 from django import forms
